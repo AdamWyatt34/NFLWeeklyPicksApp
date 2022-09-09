@@ -1,0 +1,24 @@
+﻿@page "/confirm-email"
+
+<h2>Confirm Email</h2>
+@if (_isLoading)
+{
+    <div class="col-md-4 p-3">
+        <RadzenCard>
+            <h4 class="mb-4">Loading weeks...</h4>
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+        </RadzenCard>
+    </div>
+}
+else if (!_showError)
+{
+    <div class="alert alert-success" role="alert">
+        Thank you for confirming your email. Please <a href="">click here to navigate to the Home page </a>.
+    </div>
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        Error confirming your email. Please try again.
+    </div>
+}

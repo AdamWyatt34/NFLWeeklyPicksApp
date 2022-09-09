@@ -1,0 +1,29 @@
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Identity;
+using NFLWeeklyPicksUI.Models.Authentication;
+using NFLWeeklyPicksUI.Services;
+
+namespace NFLWeeklyPicksUI.Pages.Authentication
+{
+    public partial class Register
+    {
+        private RegisterUserViewModel _registerUser = new();
+
+        [Inject]
+        public IAuthenticationService AuthenticationService { get; set; }
+
+        private bool _hasErrors = false;
+        private IEnumerable<IdentityError>? Errors { get; set; }
+
+        private async Task Submit(RegisterUserViewModel registerUser)
+        {
+            var result = await AuthenticationService.RegisterUser(registerUser);
+
+            if (result.Errors.Any())
+            {
+                Errors = result.Errors;
+                _hasErrors = true;
+            }
+        }
+    }
+}

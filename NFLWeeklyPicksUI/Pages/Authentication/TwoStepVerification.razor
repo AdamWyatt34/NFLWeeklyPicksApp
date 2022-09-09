@@ -1,0 +1,28 @@
+@page "/two-step-verificaiton"
+
+<h3>Two-Step Verificaiton</h3>
+
+@if (_showError)
+{
+    <div class="alert alert-danger" role="alert">
+        Two-Step Verification Failed.
+    </div>
+}
+
+<RadzenTemplateForm Data="code" Submit="@(async (string arg) => { await Submit(arg); })">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Code"/>
+            </div>
+            <div class="col-md-8">
+                <RadzenTextBox @bind-Value="code" style="width: 100%;" Name="code"/>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="check_circle" Text="Submit"/>
+            </div>
+        </div>
+    </div>
+</RadzenTemplateForm>

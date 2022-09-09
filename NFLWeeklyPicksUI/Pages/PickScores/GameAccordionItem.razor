@@ -1,0 +1,31 @@
+@using NFLWeeklyPicksUI.Models
+<style>
+    .row-highlight{
+        background-color: lightgoldenrodyellow;
+    }
+</style>
+
+@if (_renderFullTeamNames)
+{
+    <RadzenAccordionItem Text="@_accordionText" Icon="sports_football">
+        <RadzenDataGrid Data="@GameWithScore.UserPicks" RowRender="RowRender" TItem="UserPickScoreViewModel">
+            <Columns>
+                <RadzenDataGridColumn Title="Username" TItem="UserPickScoreViewModel" Property="Username"/>
+                <RadzenDataGridColumn Title="Team" TItem="UserPickScoreViewModel" Property="SelectedTeam"/>
+            </Columns>
+        </RadzenDataGrid>
+    </RadzenAccordionItem>
+}
+else
+{
+    <RadzenAccordionItem Text="@_abbreviatedAccordionText" Icon="sports_football">
+        <RadzenDataGrid Data="@GameWithScore.UserPicks" RowRender="RowRender" TItem="UserPickScoreViewModel">
+            <Columns>
+                <RadzenDataGridColumn Title="Username" TItem="UserPickScoreViewModel" Property="Username"/>
+                <RadzenDataGridColumn Title="Team" TItem="UserPickScoreViewModel" Property="SelectedTeamAbbreviation"/>
+            </Columns>
+        </RadzenDataGrid>
+    </RadzenAccordionItem>
+}
+
+<RadzenMediaQuery Query="(max-width: 768px)" Change="@OnChange"/>

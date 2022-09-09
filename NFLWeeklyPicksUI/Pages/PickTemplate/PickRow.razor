@@ -1,0 +1,12 @@
+﻿<div class="d-flex flex-row w-auto mb-1" style="justify-content: flex-start;">
+    <RadzenCheckBox disabled="@isLocked" @bind-Value="@AwayTeamSelected" class="mr-2 mt-2"
+                    Name="awayTeamCheckbox" TValue="bool" Change=@(args => HandleCheckboxChange(args, "awayTeam"))/>
+    <PickTeam Team="Game.AwayTeam"/>
+    <div class="mx-3">
+        <div>@Game.GameDate</div>
+        <div>Odds: @Game.Odds</div>
+    </div>
+    <PickTeam Team="Game.HomeTeam"/>
+    <RadzenCheckBox disabled="@isLocked" @bind-Value="@HomeTeamSelected" class="ml-2 mt-2"
+                    Name="homeTeamCheckbox" TValue="bool" Change=@(args => HandleCheckboxChange(args, "homeTeam"))/>
+</div>

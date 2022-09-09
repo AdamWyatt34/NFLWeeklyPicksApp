@@ -1,0 +1,26 @@
+﻿@page "/login"
+
+@if (_showError)
+{
+    <div class="alert alert-danger" role="alert">
+        Forgot password failed.
+    </div>
+}
+
+@if (_showSuccess)
+{
+    <div class="alert alert-success" role="alert">
+        The link has been sent, please check your email to reset your password.
+    </div>
+}
+
+<div class="col-xl-4 p-3">
+    <RadzenCard>
+        <h2 class="mb-4">Register and password reset</h2>
+        <RadzenTemplateForm Data=@("LoginWithRegisterAndReset")>
+            <RadzenLogin Login=@(args => OnLogin(args))
+                         ResetPassword=@(args => OnResetPassword(args))
+                         Register=@(args => OnRegister("Login with register and password reset"))/>
+        </RadzenTemplateForm>
+    </RadzenCard>
+</div>

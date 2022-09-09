@@ -1,0 +1,28 @@
+@page "/picks/scores/{Season:int}/{Week:int}"
+
+<h3>@_headerText</h3>
+
+@if (_isLoading)
+{
+    <div class="col-md-4 p-3">
+        <RadzenCard>
+            <h4 class="mb-4">Loading picks...</h4>
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+        </RadzenCard>
+    </div>
+}
+else
+{
+    <div class="col-xl-6 p-3">
+        <RadzenCard>
+            <RadzenAccordion Multiple="true">
+                <Items>
+                    @foreach (var game in _gamesWithScores.Games)
+                    {
+                        <GameAccordionItem GameWithScore=@game/>
+                    }
+                </Items>
+            </RadzenAccordion>
+        </RadzenCard>
+    </div>
+}

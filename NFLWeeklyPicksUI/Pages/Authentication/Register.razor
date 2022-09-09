@@ -1,0 +1,79 @@
+﻿@page "/register"
+@using NFLWeeklyPicksUI.Models.Authentication
+
+@if (_hasErrors)
+{
+    <p>Please correct the following error(s):</p>
+    <br>
+    <ul>
+        @foreach (var error in Errors)
+        {
+            <li>@error.Description</li>
+        }
+    </ul>
+}
+<RadzenTemplateForm Data=@_registerUser Submit="@(async (RegisterUserViewModel args) => { await Submit(args); })">
+    <div class="col-md-6">
+         <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Username" />
+            </div>
+            <div class="col-md-8">
+                <RadzenTextBox @bind-Value=@_registerUser.UserName style="width: 100%;" Name="Username" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Email Address" />
+            </div>
+            <div class="col-md-8">
+                <RadzenTextBox @bind-Value=@_registerUser.Email style="width: 100%;" Name="EmailAddress" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="First Name" />
+            </div>
+            <div class="col-md-8">
+                <RadzenTextBox @bind-Value=@_registerUser.FirstName style="width: 100%;" Name="FirstName" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="LastName" />
+            </div>
+            <div class="col-md-8">
+                <RadzenTextBox @bind-Value=@_registerUser.LastName style="width: 100%;" Name="LastName" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Password" />
+            </div>
+            <div class="col-md-8">
+                <RadzenPassword @bind-Value=@_registerUser.Password style="width: 100%;" Name="Password" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Confirm Password" />
+            </div>
+            <div class="col-md-8">
+                <RadzenPassword @bind-Value=@_registerUser.ConfirmPassword style="width: 100%;" Name="ConfirmPassword" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Phone #" />
+            </div>
+            <div class="col-md-8">
+                <RadzenTextBox @bind-Value=@_registerUser.PhoneNumber style="width: 100%;" Name="PhoneNumber" />
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" />
+        </div>
+    </div>
+</RadzenTemplateForm>

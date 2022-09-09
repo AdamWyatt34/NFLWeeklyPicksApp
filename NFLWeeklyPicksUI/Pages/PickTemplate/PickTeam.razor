@@ -1,0 +1,19 @@
+﻿<div class="d-flex flex-row w-25">
+    <div class="mx-3">
+        @if (_renderImage)
+        {
+            <div>@Team.FullName</div>
+        }
+        else
+        {
+            <div>@Team.Abbreviation</div>
+        }
+        <div>@Team.Record</div>
+    </div>
+    @if (_renderImage)
+    {
+        <RadzenImage class="img-fluid mw-100" Style="height: 50px" Path="@Team.LogoURL"/>
+    }
+</div>
+
+<RadzenMediaQuery Query="(max-width: 768px)" Change="@OnChange"/>

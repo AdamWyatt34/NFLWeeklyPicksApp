@@ -1,0 +1,19 @@
+﻿<RadzenFieldset Text="Total Points">
+    <div class="row">
+        <div class="align-items-center d-flex col-md-3">
+            @if (_fullNames)
+            {
+                <RadzenLabel Text="@LastGame.GameName"/>
+            }
+            else
+            {
+                <RadzenLabel Text=@($"{LastGame.AwayTeam.Abbreviation} @ {LastGame.HomeTeam.Abbreviation}")/>
+            }
+        </div>
+        <div class="col-md-3">
+            <RadzenNumeric Disabled="@isLocked" Placeholder="0" style="width: 100%;" Name="Points" @bind-Value="LastGamePickLineItem.TotalPoints"/>
+        </div>
+    </div>
+</RadzenFieldset>
+
+<RadzenMediaQuery Query="(max-width: 768px)" Change=@OnChange/>

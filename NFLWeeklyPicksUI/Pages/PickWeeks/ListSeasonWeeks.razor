@@ -1,0 +1,44 @@
+﻿@page "/season-weeks"
+
+@using NFLWeeklyPicksUI.Models
+
+<h3>@($"{_currentSeason} Weeks")</h3>
+@if (_seasonWeeks == null)
+{
+    <div class="col-md-4 p-3">
+        <RadzenCard>
+            <h4 class="mb-4">Loading weeks...</h4>
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+        </RadzenCard>
+    </div>
+}
+else
+{
+    <RadzenDataGrid TItem="SeasonWeeksViewModel" Data="@_seasonWeeks">
+        <Columns>
+            <RadzenDataGridColumn TItem="SeasonWeeksViewModel" Property="WeekDescription" Title="Week" TextAlign="TextAlign.Center"/>
+            <RadzenDataGridColumn TItem="SeasonWeeksViewModel" Property="StartDate" FormatString="{0:d}" Title="Week Starts"/>
+            <RadzenDataGridColumn TItem="SeasonWeeksViewModel" Property="EndDate" FormatString="{0:d}" Title="Week Ends"/>
+            <RadzenDataGridColumn TItem="SeasonWeeksViewModel">
+                <Template Context="seasonWeeksViewModel">
+                    @if (seasonWeeksViewModel.UserPickId == 0)
+                    {
+                        <RadzenButton Disabled="seasonWeeksViewModel.IsDisabled" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Primary"
+                                      Click="() => OpenWeekPicks(seasonWeeksViewModel)" Text="View Picks"/>
+                    }
+                    else
+                    {
+                        <RadzenButton Disabled="seasonWeeksViewModel.IsDisabled" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Success"
+                                      Click="() => OpenWeekPicks(seasonWeeksViewModel)" Text="Edit Picks"/>
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="SeasonWeeksViewModel">
+                <Template Context="seasonWeeksViewModel">
+                    <RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary"
+                                  Text="View Submitted Picks" Click="() => OpenWeekPicksWithScore(seasonWeeksViewModel)"/>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+}
