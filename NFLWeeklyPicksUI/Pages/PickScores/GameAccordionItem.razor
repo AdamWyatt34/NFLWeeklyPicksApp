@@ -10,7 +10,7 @@
     <RadzenAccordionItem Text="@_accordionText" Icon="sports_football">
         <RadzenDataGrid Data="@GameWithScore.UserPicks" RowRender="RowRender" TItem="UserPickScoreViewModel">
             <Columns>
-                <RadzenDataGridColumn Title="Username" TItem="UserPickScoreViewModel" Property="Username"/>
+                <RadzenDataGridColumn Title="Username" TItem="UserPickScoreViewModel" Property="UserPickDescription"/>
                 <RadzenDataGridColumn Title="Team" TItem="UserPickScoreViewModel" Property="SelectedTeam"/>
             </Columns>
         </RadzenDataGrid>
@@ -21,7 +21,7 @@ else
     <RadzenAccordionItem Text="@_abbreviatedAccordionText" Icon="sports_football">
         <RadzenDataGrid Data="@GameWithScore.UserPicks" RowRender="RowRender" TItem="UserPickScoreViewModel">
             <Columns>
-                <RadzenDataGridColumn Title="Username" TItem="UserPickScoreViewModel" Property="Username"/>
+                <RadzenDataGridColumn Title="Username" TItem="UserPickScoreViewModel" Property="UserPickDescription"/>
                 <RadzenDataGridColumn Title="Team" TItem="UserPickScoreViewModel" Property="SelectedTeamAbbreviation"/>
             </Columns>
         </RadzenDataGrid>

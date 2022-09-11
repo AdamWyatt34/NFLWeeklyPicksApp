@@ -76,15 +76,29 @@ public class GetCompetitionsWithScores : IRequest<WeeklyGameWithScoreViewModel>
 
             var picks = new List<UserPickScoreViewModel>();
 
+            var currentIndex = 0;
+            var user = userPicks.FirstOrDefault().UserId;
             foreach (var pick in userPicks)
             {
+                if (pick.UserId == user)
+                {
+                    currentIndex++;
+                }
+                else
+                {
+                    currentIndex = 1;
+                    user = pick.UserId;
+                }
+
                 var selectedTeamId = pick.PickLineItems.First(pl => pl.CompetitionId == competitionId).PickTeamId;
                 var team = teams.Find(t => t.Id == selectedTeamId);
                 picks.Add(new UserPickScoreViewModel()
                 {
                     SelectedTeam = team.FullName,
                     SelectedTeamAbbreviation = team.Abbreviation,
-                    Username = users.Find(u => u.Id == pick.UserId.ToString()).UserName
+                    Username = users.Find(u => u.Id == pick.UserId.ToString()).UserName,
+                    UserPickNumber = currentIndex,
+                    SelectedTeamId = team.Id
                 });
             }
 

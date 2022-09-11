@@ -10,7 +10,7 @@ namespace NFLWeeklyPicksAPI.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public bool IsDisabled { get; set; }
-        public int UserPickId { get; set; }
+        public IList<SeasonWeekUserPickViewModel> UserPicks { get; set; } = new List<SeasonWeekUserPickViewModel>();
         public int Season { get; set; }
 
         internal static Expression<Func<Models.Entities.SeasonWeeks, SeasonWeeksViewModel>> Selector =>
@@ -24,5 +24,11 @@ namespace NFLWeeklyPicksAPI.ViewModels
                 IsDisabled = !(DateTime.Now < record.EndDate),
                 Season = record.Season.Year
             };
+    }
+
+    public class SeasonWeekUserPickViewModel
+    {
+        public int UserPickId { get; set; }
+        public string UserPickDescription { get; set; }
     }
 }

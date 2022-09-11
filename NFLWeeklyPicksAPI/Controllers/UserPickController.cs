@@ -10,7 +10,7 @@ namespace NFLWeeklyPicksAPI.Controllers
 {
     [Route("api/user-pick")]
     [ApiController]
-    [Authorize]
+    // TODO Uncomment [Authorize]
     public class UserPickController : ControllerBase
     {
         private readonly IMediator _dispatcher;
@@ -28,5 +28,9 @@ namespace NFLWeeklyPicksAPI.Controllers
 
         [Route(""), HttpPut, ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<Unit> UpdateUserPick(UpdateUserPick query) => await _dispatcher.Send(query);
+
+        [Route("{Season}/{WeekNumber}"), HttpGet, ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<List<WeeklyGameWithScoreAndWinnerViewModel>> CalculatePickRecordsWeek(
+            [FromRoute] CalculatePickRecordsWeek query) => await _dispatcher.Send(query);
     }
 }

@@ -14,7 +14,7 @@ namespace NFLWeeklyPicksUI.Pages.PickWeeks
         [Inject] public NavigationManager NavigationManager { get; set; }
         [Inject] public HttpInterceptorService Interceptor { get; set; }
 
-        private IList<SeasonWeeksViewModel>? _seasonWeeks;
+        private List<SeasonWeeksViewModel> _seasonWeeks = new();
         private int _currentSeason = 2022; //TODO inject this
 
         protected override async Task OnInitializedAsync()
@@ -22,24 +22,7 @@ namespace NFLWeeklyPicksUI.Pages.PickWeeks
             Interceptor.RegisterEvent();
             Interceptor.RegisterBeforeSendEvent();
             _seasonWeeks =
-                await Client.GetFromJsonAsync<IList<SeasonWeeksViewModel>>($"api/season/{_currentSeason}/weeks");
-        }
-
-        private void OpenWeekPicks(SeasonWeeksViewModel viewModel)
-        {
-            if (viewModel.UserPickId > 0)
-            {
-                NavigationManager.NavigateTo($"/picks/{viewModel.UserPickId}");
-            }
-            else
-            {
-                NavigationManager.NavigateTo($"picks/{viewModel.Season}/{viewModel.WeekNumber}");
-            }
-        }
-
-        private void OpenWeekPicksWithScore(SeasonWeeksViewModel viewModel)
-        {
-            NavigationManager.NavigateTo($"picks/scores/{viewModel.Season}/{viewModel.WeekNumber}");
+                await Client.GetFromJsonAsync<List<SeasonWeeksViewModel>>($"api/season/{_currentSeason}/weeks");
         }
 
         public void Dispose() => Interceptor.DisposeEvent();

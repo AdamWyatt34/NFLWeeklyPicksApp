@@ -38,19 +38,30 @@ namespace NFLWeeklyPicksAPI.Queries.SeasonWeeks
                 return viewModels;
             }
 
-            private async Task SupplementSubmittedUserPicks(IList<SeasonWeeksViewModel> viewModels,
+            private async Task SupplementSubmittedUserPicks(IEnumerable<SeasonWeeksViewModel> viewModels,
                 CancellationToken cancellationToken)
             {
                 var currentUser = await _contextAccessor.HttpContext.GetCurrentUser(_userManager);
+                var currentIndex = 0;
 
                 foreach (var viewModel in viewModels)
                 {
-                    viewModel.UserPickId = await _db.UserPicks
+                    currentIndex++;
+                    var userPicks = await _db.UserPicks
                         .Where(
                             u => u.Season == viewModel.Season && u.Week == viewModel.WeekNumber &&
                                  u.UserId == Guid.Parse(currentUser.Id))
                         .Select(u => u.UserPicksId)
-                        .FirstOrDefaultAsync(cancellationToken);
+                        .ToListAsync(cancellationToken);
+
+                    foreach (var userPick in userPicks)
+                    {
+                        viewModel.UserPicks.Add(new SeasonWeekUserPickViewModel()
+                        {
+                            UserPickId = userPick,
+                            UserPickDescription = $"{currentUser} - {currentIndex}"
+                        });
+                    }
                 }
             }
         }

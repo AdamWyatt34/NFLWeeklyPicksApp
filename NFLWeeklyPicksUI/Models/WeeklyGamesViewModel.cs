@@ -38,6 +38,8 @@
         public string Username { get; set; }
         public string SelectedTeam { get; set; }
         public string SelectedTeamAbbreviation { get; set; }
+        public int UserPickNumber { get; set; }
+        public string UserPickDescription => Username + " - " + UserPickNumber;
     }
 
     public class TeamViewModel

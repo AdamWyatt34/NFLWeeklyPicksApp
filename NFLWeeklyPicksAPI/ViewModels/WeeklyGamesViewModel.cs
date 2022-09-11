@@ -36,8 +36,21 @@
     public class UserPickScoreViewModel
     {
         public string Username { get; set; }
+        public int UserPickNumber { get; set; }
+        public int SelectedTeamId { get; set; }
         public string SelectedTeam { get; set; }
         public string SelectedTeamAbbreviation { get; set; }
+    }
+
+    public class UserPickScoreViewModelWithWinner : UserPickScoreViewModel
+    {
+        public bool IsCorrect { get; set; }
+    }
+
+    public class WeeklyGameWithScoreAndWinnerViewModel : WeeklyGameWithScoreViewModel
+    {
+        public int WinningTeamId => HomeTeam.Score > AwayTeam.Score ? HomeTeam.Id : AwayTeam.Id;
+        public List<UserPickScoreViewModelWithWinner> UserPicks { get; set; }
     }
 
     public class TeamViewModel

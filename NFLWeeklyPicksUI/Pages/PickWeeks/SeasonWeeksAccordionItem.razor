@@ -1,0 +1,18 @@
+@using NFLWeeklyPicksUI.Models
+<RadzenAccordionItem Text="@AccordionText" Icon="date_range">
+    <div class="row-cols-2">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="View Submitted Picks" Click="@OpenWeekPicksWithScore"/>
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Pick" Click="@AddNewPick" Visible="@AddPickVisible"/>
+    </div>
+    <RadzenDataGrid Data="SeasonWeek.UserPicks" TItem="SeasonWeekUserPickViewModel">
+        <Columns>
+            <RadzenDataGridColumn Title="User Pick Name" TItem="SeasonWeekUserPickViewModel" Property="UserPickDescription"/>
+            <RadzenDataGridColumn TItem="SeasonWeekUserPickViewModel">
+                <Template Context="seasonWeekUserPickViewModel">
+                    <RadzenButton Disabled="SeasonWeek.IsDisabled" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Success"
+                                  Click="() => OpenWeekPicks(seasonWeekUserPickViewModel)" Text="Edit Pick"/>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenAccordionItem>
