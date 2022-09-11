@@ -21,4 +21,12 @@ public class UserPickService : IUserPickService
 
         return result;
     }
+
+    public async Task<List<UserPickWeeklyRecordViewModel>> GetUserRecords(int season, int week)
+    {
+        var result =
+            await _client.GetFromJsonAsync<List<UserPickWeeklyRecordViewModel>>($"api/user-pick/{season}/{week}");
+
+        return result;
+    }
 }

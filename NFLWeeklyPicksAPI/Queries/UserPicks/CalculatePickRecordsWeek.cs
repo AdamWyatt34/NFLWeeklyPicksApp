@@ -7,12 +7,12 @@ using NFLWeeklyPicksAPI.ViewModels;
 
 namespace NFLWeeklyPicksAPI.Queries.UserPicks;
 
-public class CalculatePickRecordsWeek : IRequest<List<WeeklyGameWithScoreAndWinnerViewModel>>
+public class CalculatePickRecordsWeek : IRequest<List<UserPickWeeklyRecordViewModel>>
 {
     public int Season { get; set; }
     public int WeekNumber { get; set; }
 
-    public class Handler : IRequestHandler<CalculatePickRecordsWeek, List<WeeklyGameWithScoreAndWinnerViewModel>>
+    public class Handler : IRequestHandler<CalculatePickRecordsWeek, List<UserPickWeeklyRecordViewModel>>
     {
         private readonly IMediator _dispatcher;
         private readonly IHttpClientFactory _httpClient;
@@ -30,7 +30,7 @@ public class CalculatePickRecordsWeek : IRequest<List<WeeklyGameWithScoreAndWinn
             _apiUrl = _configuration.GetValue<string>("ESPNAPIUrl");
         }
 
-        public async Task<List<WeeklyGameWithScoreAndWinnerViewModel>> Handle(CalculatePickRecordsWeek request,
+        public async Task<List<UserPickWeeklyRecordViewModel>> Handle(CalculatePickRecordsWeek request,
             CancellationToken cancellationToken)
         {
             var apiUrl = $"{_apiUrl}/seasons/{request.Season}/types/2/weeks/{request.WeekNumber}/events";
@@ -97,6 +97,7 @@ public class CalculatePickRecordsWeek : IRequest<List<WeeklyGameWithScoreAndWinn
                     var team = game.HomeTeam.Id == selectedTeamId ? game.HomeTeam : game.AwayTeam;
                     picks.Add(new UserPickScoreViewModelWithWinner()
                     {
+                        UserPickId = pick.UserPicksId,
                         SelectedTeam = team.FullName,
                         SelectedTeamAbbreviation = team.Abbreviation,
                         Username = users.Find(u => u.Id == pick.UserId.ToString()).UserName,
@@ -111,8 +112,30 @@ public class CalculatePickRecordsWeek : IRequest<List<WeeklyGameWithScoreAndWinn
                 games.Add(game);
             }
 
+            //All games with each user being right or wrong.
+            var output = new List<UserPickWeeklyRecordViewModel>();
+            var distinctUserPicks = games.SelectMany(g => g.UserPicks)
+                .Select(u => new { u.UserPickId, u.Username, u.UserPickNumber })
+                .Distinct()
+                .ToList();
 
-            return games;
+            foreach (var userPick in distinctUserPicks)
+            {
+                var usersPicks = games
+                    .SelectMany(g => g.UserPicks)
+                    .Where(up => up.UserPickId == userPick.UserPickId);
+
+                output.Add(new UserPickWeeklyRecordViewModel()
+                {
+                    UserPickId = userPick.UserPickId,
+                    UserPickDescription = $"{userPick.Username} - {userPick.UserPickNumber}",
+                    Losses = usersPicks.Count(up => !up.IsCorrect).ToString(),
+                    Wins = usersPicks.Count(up => up.IsCorrect).ToString()
+                });
+            }
+
+            return output;
+            //return games;
         }
     }
 }

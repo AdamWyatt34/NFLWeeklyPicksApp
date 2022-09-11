@@ -1,0 +1,30 @@
+@using NFLWeeklyPicksUI.Models
+
+@if (_isLoading)
+{
+    <div class="col-md-4 p-3">
+        <RadzenCard>
+            <h4 class="mb-4">Loading Records...</h4>
+            <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+        </RadzenCard>
+    </div>
+}
+else
+{
+    <div class="col-xl-6 p-3">
+        <RadzenCard>
+            <RadzenAccordion>
+                <Items>
+                    <RadzenAccordionItem Text="@_headerText" Icon="people">
+                        <RadzenDataGrid Data="@_userRecords" TItem="UserPickWeeklyRecordViewModel">
+                            <Columns>
+                                <RadzenDataGridColumn Title="User Pick" TItem="UserPickWeeklyRecordViewModel" Property="UserPickDescription"/>
+                                <RadzenDataGridColumn Title="Weekly Record" TItem="UserPickWeeklyRecordViewModel" Property="Record"></RadzenDataGridColumn>
+                            </Columns>
+                        </RadzenDataGrid>
+                    </RadzenAccordionItem>
+                </Items>
+            </RadzenAccordion>
+        </RadzenCard>
+    </div>
+}

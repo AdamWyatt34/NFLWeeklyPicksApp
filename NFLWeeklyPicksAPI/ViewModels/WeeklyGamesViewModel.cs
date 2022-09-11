@@ -44,6 +44,7 @@
 
     public class UserPickScoreViewModelWithWinner : UserPickScoreViewModel
     {
+        public int UserPickId { get; set; }
         public bool IsCorrect { get; set; }
     }
 
