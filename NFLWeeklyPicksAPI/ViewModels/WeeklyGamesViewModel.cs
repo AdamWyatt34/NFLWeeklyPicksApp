@@ -50,7 +50,9 @@
 
     public class WeeklyGameWithScoreAndWinnerViewModel : WeeklyGameWithScoreViewModel
     {
-        public int WinningTeamId => HomeTeam.Score > AwayTeam.Score ? HomeTeam.Id : AwayTeam.Id;
+        public int WinningTeamId => HomeTeam.Score == AwayTeam.Score ? 0 :
+            HomeTeam.Score > AwayTeam.Score ? HomeTeam.Id : AwayTeam.Id;
+
         public List<UserPickScoreViewModelWithWinner> UserPicks { get; set; }
     }
 

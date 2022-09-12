@@ -20,9 +20,11 @@ public partial class GameAccordionItem
             $"{GameWithScore.AwayTeam.Abbreviation}({GameWithScore.AwayTeam.Score})" +
             $" @ {GameWithScore.HomeTeam.Abbreviation}({GameWithScore.HomeTeam.Score})";
 
-        _winningTeam = GameWithScore.HomeTeam.Score > GameWithScore.AwayTeam.Score
-            ? GameWithScore.HomeTeam.FullName
-            : GameWithScore.AwayTeam.FullName;
+        _winningTeam = GameWithScore.HomeTeam.Score == GameWithScore.AwayTeam.Score
+            ? "Tie"
+            : GameWithScore.HomeTeam.Score > GameWithScore.AwayTeam.Score
+                ? GameWithScore.HomeTeam.FullName
+                : GameWithScore.AwayTeam.FullName;
     }
 
     private void RowRender(RowRenderEventArgs<UserPickScoreViewModel> args)
