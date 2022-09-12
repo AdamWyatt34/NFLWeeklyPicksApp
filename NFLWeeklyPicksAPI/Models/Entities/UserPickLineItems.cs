@@ -14,6 +14,7 @@ namespace NFLWeeklyPicksAPI.Models.Entities
         public int PickTypeId { get; set; }
         public PickTypes PickType { get; set; }
         public long CompetitionId { get; set; }
+        public Competitions Competition { get; set; }
         public int PickTeamId { get; set; }
         public int PickPoints { get; set; }
     }

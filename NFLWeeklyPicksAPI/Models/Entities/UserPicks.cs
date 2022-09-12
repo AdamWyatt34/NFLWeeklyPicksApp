@@ -10,6 +10,7 @@ namespace NFLWeeklyPicksAPI.Models.Entities
         public Guid UserId { get; set; }
         public int Season { get; set; }
         public int Week { get; set; }
+        public bool IsPaid { get; set; }
         public ICollection<UserPickLineItems> PickLineItems { get; set; }
     }
 }

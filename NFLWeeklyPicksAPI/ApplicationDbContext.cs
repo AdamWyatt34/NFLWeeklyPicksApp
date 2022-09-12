@@ -23,5 +23,8 @@ namespace NFLWeeklyPicksAPI
         public DbSet<PickTypes> PickTypes { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<SeasonWeeks> SeasonWeeks { get; set; }
+        public DbSet<Competitions> Competitions { get; set; }
+        public DbSet<Teams> Teams { get; set; }
+        public DbSet<TeamSeasonRecords> TeamSeasonRecords { get; set; }
     }
 }
