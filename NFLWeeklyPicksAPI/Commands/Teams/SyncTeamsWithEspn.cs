@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NFLWeeklyPicksAPI.Extensions;
+using NFLWeeklyPicksAPI.Models.Entities;
 using NFLWeeklyPicksAPI.Models.ESPNDataModels;
 using NFLWeeklyPicksAPI.Models.ESPNSyncModels;
 
@@ -54,16 +55,18 @@ public class SyncTeamsWithEspn : IRequest<Unit>
                 var team = await teamClient.GetFromJsonAsync<TeamModel>(teamUrl.Ref,
                     cancellationToken: cancellationToken);
 
-                //Upsert record
-                await UpsertTeam(team, cancellationToken);
+                //Upsert team
+                var id = await UpsertTeam(team, cancellationToken);
 
+                //Upsert record
+                await UpsertRecord(request.Season, id, team.record.Ref, cancellationToken);
                 await _db.SaveChangesAsync(cancellationToken);
             }
 
             return Unit.Value;
         }
 
-        private async Task UpsertTeam(TeamModel team, CancellationToken cancellationToken)
+        private async Task<int> UpsertTeam(TeamModel team, CancellationToken cancellationToken)
         {
             var record = await _db.Teams
                 .Where(t => t.EspnTeamId == int.Parse(team.id))
@@ -71,7 +74,7 @@ public class SyncTeamsWithEspn : IRequest<Unit>
 
             if (record == null)
             {
-                await _db.Teams.AddAsync(new Models.Entities.Teams()
+                var result = await _db.Teams.AddAsync(new Models.Entities.Teams()
                 {
                     EspnTeamId = int.Parse(team.id),
                     Abbreviation = team.abbreviation,
@@ -80,6 +83,8 @@ public class SyncTeamsWithEspn : IRequest<Unit>
                     LogoURL = team.logos.First().href,
                     Nickname = team.nickname
                 }, cancellationToken);
+
+                return result.Entity.TeamsId;
             }
             else
             {
@@ -88,6 +93,38 @@ public class SyncTeamsWithEspn : IRequest<Unit>
                 record.Location = team.location;
                 record.LogoURL = team.logos.First().href;
                 record.Nickname = team.nickname;
+
+                return record.TeamsId;
+            }
+        }
+
+        private async Task UpsertRecord(int season, int teamId, string recordUrl, CancellationToken cancellationToken)
+        {
+            //Get Season Id
+            var seasonId = await _db.Seasons
+                .Where(s => s.Year == season)
+                .FirstAsync(cancellationToken);
+
+            var teamSeasonRecord = await _db.TeamSeasonRecords
+                .Where(tsr => tsr.Season == seasonId)
+                .Where(tsr => tsr.TeamId == teamId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            var client = _clientFactory.CreateClientWithUrl(recordUrl);
+            var result = await client.GetFromJsonAsync<RecordModel>(recordUrl, cancellationToken);
+
+            if (teamSeasonRecord == null)
+            {
+                var entity = await _db.TeamSeasonRecords.AddAsync(new TeamSeasonRecords()
+                {
+                    TeamId = teamId,
+                    Season = seasonId,
+                    Record = result.items.First().displayValue
+                }, cancellationToken);
+            }
+            else
+            {
+                teamSeasonRecord.Record = result.items.First().displayValue;
             }
         }
     }
