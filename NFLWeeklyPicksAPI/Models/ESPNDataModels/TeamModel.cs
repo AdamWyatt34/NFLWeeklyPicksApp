@@ -6,7 +6,8 @@ namespace NFLWeeklyPicksAPI.Models.ESPNDataModels
     {
         //[JsonPropertyName("$ref")]
         //public string Ref { get; set; }
-        //public string id { get; set; }
+        public string id { get; set; }
+
         //public string guid { get; set; }
         //public string uid { get; set; }
         //public AlternateIds alternateIds { get; set; }
@@ -16,13 +17,16 @@ namespace NFLWeeklyPicksAPI.Models.ESPNDataModels
         public string nickname { get; set; }
         public string abbreviation { get; set; }
         public string displayName { get; set; }
+
         public string shortDisplayName { get; set; }
+
         //public string color { get; set; }
         //public string alternateColor { get; set; }
         //public bool isActive { get; set; }
         //public bool isAllStar { get; set; }
         public List<Logo> logos { get; set; }
         public RefLink record { get; set; }
+
         public RefLink athletes { get; set; }
         //public Venue venue { get; set; }
         //public RefLink groups { get; set; }

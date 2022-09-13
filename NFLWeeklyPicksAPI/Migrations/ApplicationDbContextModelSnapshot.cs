@@ -51,15 +51,15 @@ namespace NFLWeeklyPicksAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "72b8e99d-d8df-4096-8e9a-24ec7be8ee03",
-                            ConcurrencyStamp = "e51d0931-34ee-403b-ac6c-32fc2404016b",
+                            Id = "e946f55f-260a-4788-a601-ff2265b05adf",
+                            ConcurrencyStamp = "678a1439-697b-462e-b4d8-47365371c5c8",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "349d6d32-fb38-492b-8e19-75a0511f104f",
-                            ConcurrencyStamp = "102e5dff-8584-447c-85c3-f3f1d4a0beaf",
+                            Id = "ab861aa4-a7bb-4912-ab27-6442dcfe57cb",
+                            ConcurrencyStamp = "3b666bb8-e434-49e2-92bd-106b3bd8fbc4",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -185,6 +185,9 @@ namespace NFLWeeklyPicksAPI.Migrations
                     b.Property<string>("AwayTeamScoreUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("EspnCompetitionId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("GameDate")
                         .HasColumnType("datetime2");
 
@@ -298,6 +301,9 @@ namespace NFLWeeklyPicksAPI.Migrations
 
                     b.Property<string>("Abbreviation")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EspnTeamId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");

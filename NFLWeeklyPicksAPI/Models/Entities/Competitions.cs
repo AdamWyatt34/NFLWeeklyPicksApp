@@ -3,6 +3,7 @@ namespace NFLWeeklyPicksAPI.Models.Entities;
 public class Competitions
 {
     public int CompetitionsId { get; set; }
+    public long EspnCompetitionId { get; set; }
     public int SeasonWeeksId { get; set; }
     public SeasonWeeks SeasonWeeks { get; set; }
     public string GameName { get; set; }
