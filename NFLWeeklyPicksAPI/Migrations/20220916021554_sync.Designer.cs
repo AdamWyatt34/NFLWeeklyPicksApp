@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NFLWeeklyPicksAPI;
 
@@ -11,9 +12,10 @@ using NFLWeeklyPicksAPI;
 namespace NFLWeeklyPicksAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220916021554_sync")]
+    partial class sync
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +53,15 @@ namespace NFLWeeklyPicksAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "73192524-f18c-430b-8ea2-a7b44a4d739b",
-                            ConcurrencyStamp = "7fa173f5-076e-48b7-bee3-cdc3453b4562",
+                            Id = "00050a14-4369-4441-a305-f395fa13db62",
+                            ConcurrencyStamp = "1e5e9abc-9d38-4da2-992b-14f22d323dc4",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "b6106de8-2173-4fc5-9196-ccbe9c797219",
-                            ConcurrencyStamp = "6ba2d7e5-124b-4f20-b61b-9125f4c6a7cd",
+                            Id = "f81f3198-fbba-4f02-9689-df930f889df7",
+                            ConcurrencyStamp = "427ce0bc-ef99-4ed2-8964-e54fe0e8f023",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -207,6 +209,10 @@ namespace NFLWeeklyPicksAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CompetitionsId");
+
+                    b.HasIndex("AwayTeamId");
+
+                    b.HasIndex("HomeTeamId");
 
                     b.HasIndex("SeasonWeeksId");
 
@@ -536,11 +542,27 @@ namespace NFLWeeklyPicksAPI.Migrations
 
             modelBuilder.Entity("NFLWeeklyPicksAPI.Models.Entities.Competitions", b =>
                 {
+                    b.HasOne("NFLWeeklyPicksAPI.Models.Entities.Teams", "AwayTeam")
+                        .WithMany()
+                        .HasForeignKey("AwayTeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NFLWeeklyPicksAPI.Models.Entities.Teams", "HomeTeam")
+                        .WithMany()
+                        .HasForeignKey("HomeTeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("NFLWeeklyPicksAPI.Models.Entities.SeasonWeeks", "SeasonWeeks")
                         .WithMany("Competitions")
                         .HasForeignKey("SeasonWeeksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AwayTeam");
+
+                    b.Navigation("HomeTeam");
 
                     b.Navigation("SeasonWeeks");
                 });

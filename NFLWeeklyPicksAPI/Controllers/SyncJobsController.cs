@@ -1,6 +1,7 @@
 using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NFLWeeklyPicksAPI.Commands;
 using NFLWeeklyPicksAPI.Commands.Competitions;
 using NFLWeeklyPicksAPI.Commands.SeasonWeeks;
 using NFLWeeklyPicksAPI.Commands.Teams;
@@ -26,4 +27,7 @@ public class SyncJobsController : ControllerBase
 
     [Route("competitions"), HttpPost, ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<Unit> SyncCompetitionsWithEspn(SyncCompetitionsWithEspn query) => await _dispatcher.Send(query);
+
+    [Route("record-email"), HttpPost, ProducesResponseType((int)HttpStatusCode.NoContent)]
+    public async Task<Unit> EmailCalculatedRecords(EmailCalculatedRecords query) => await _dispatcher.Send(query);
 }

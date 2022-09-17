@@ -27,6 +27,7 @@ public class SyncCompetitionsWithEspn : IRequest<Unit>
             var lastSeasonWeek =
                 await _db.SeasonWeeks
                     .Include(sw => sw.Season)
+                    .Where(sw => sw.Season.Year == 2022 && sw.WeekNumber == 1)
                     .OrderByDescending(sw => sw.EndDate)
                     .FirstAsync(cancellationToken);
 
@@ -51,9 +52,11 @@ public class SyncCompetitionsWithEspn : IRequest<Unit>
                     HomeTeamScoreUrl =
                         $"{_apiUrl}/events/{competition.CompetitionId}/competitions/{competition.CompetitionId}/competitors/{competition.HomeTeam.Id}/score",
                     Odds = competition.Odds,
-                    SeasonWeeks = lastSeasonWeek
+                    SeasonWeeksId = lastSeasonWeek.SeasonWeeksId,
                 }, cancellationToken);
             }
+
+            await _db.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }
