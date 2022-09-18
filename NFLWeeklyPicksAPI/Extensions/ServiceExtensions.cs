@@ -5,6 +5,7 @@ using NFLWeeklyPicksAPI.Behaviors.CustomTokenProviders;
 using NFLWeeklyPicksAPI.Models.Entities;
 using NFLWeeklyPicksAPI.Options;
 using System.Text;
+using Quartz.Impl;
 
 namespace NFLWeeklyPicksAPI.Extensions
 {
@@ -58,5 +59,15 @@ namespace NFLWeeklyPicksAPI.Extensions
 
         public static void AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration) =>
             services.Configure<JwtOptions>(configuration.GetSection("JwtSettings"));
+
+        public async static Task ConfigureJobs(this IServiceCollection services)
+        {
+            var factory = new StdSchedulerFactory();
+            var scheduler = await factory.GetScheduler();
+
+            await scheduler.Start();
+
+            //Define job
+        }
     }
 }

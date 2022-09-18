@@ -10,7 +10,11 @@ using NFLWeeklyPicksAPI.Behaviors;
 using NFLWeeklyPicksAPI.Behaviors.CustomTokenProviders;
 using NFLWeeklyPicksAPI.Behaviors.Interfaces;
 using NFLWeeklyPicksAPI.Extensions;
+using NFLWeeklyPicksAPI.Jobs;
 using NFLWeeklyPicksAPI.Options;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -54,6 +58,31 @@ builder.Services.Configure<ClientAppOptions>(clientAppConfig);
 //    options.ClientId = googleConfig.ClientId;
 //    options.ClientSecret = googleConfig.ClientSecret;
 //});
+
+
+//Quartz TODO: Implement later
+// builder.Services.AddSingleton<IJobFactory, PicksJobFactory>();
+// builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+// builder.Services.AddSingleton<WeeklyWinnerEmailJob>();
+// builder.Services.AddSingleton(new JobSchedule(typeof(WeeklyWinnerEmailJob), "0 0/5 * * * ?"));
+// builder.Services.AddQuartz(q =>
+// {
+//     //Job for weekly winner email
+//     q.ScheduleJob<WeeklyWinnerEmailJob>(trigger => trigger
+//         .WithIdentity("Weekly Winner Email Trigger")
+//         .StartNow()
+//         .WithDescription("Test job"));
+//     //Job to sync weeks
+//
+//     //Job to sync competitions
+// });
+
+builder.Services.AddQuartzHostedService(options =>
+{
+    //Shut down jobs gracefully.
+    options.WaitForJobsToComplete = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
