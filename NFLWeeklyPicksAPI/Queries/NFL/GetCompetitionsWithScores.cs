@@ -104,7 +104,7 @@ public class GetCompetitionsWithScores : IRequest<WeeklyGameWithScoreViewModel>
 
             return new WeeklyGameWithScoreViewModel()
             {
-                CompetitionId = long.Parse(competition.id),
+                CompetitionId = int.Parse(competition.id),
                 GameName = competition.name,
                 GameDate = new DateTime(tempDate.Year, tempDate.Month, tempDate.Day, tempDate.Hour, tempDate.Minute,
                     tempDate.Second),

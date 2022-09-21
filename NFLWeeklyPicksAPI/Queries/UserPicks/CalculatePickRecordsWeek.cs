@@ -78,8 +78,11 @@ public class CalculatePickRecordsWeek : IRequest<List<UserPickWeeklyRecordViewMo
 
                 var picks = new List<UserPickScoreViewModelWithWinner>();
 
+                //Verify can replace all code above with dispatch to New ListWeeklyGamesWithScore
+                
                 var currentIndex = 0;
                 var user = userPicks.FirstOrDefault().UserId;
+                //Should be able to change loop just to populate is correct
                 foreach (var pick in userPicks)
                 {
                     if (pick.UserId == user)
@@ -135,7 +138,6 @@ public class CalculatePickRecordsWeek : IRequest<List<UserPickWeeklyRecordViewMo
             }
 
             return output;
-            //return games;
         }
     }
 }

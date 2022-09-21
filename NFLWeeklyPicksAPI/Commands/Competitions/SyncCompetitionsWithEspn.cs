@@ -40,17 +40,27 @@ public class SyncCompetitionsWithEspn : IRequest<Unit>
             //Add each competition to competition table
             foreach (var competition in competitions.Games)
             {
+                var homeTeamId = await _db.Teams
+                    .Where(t => t.Abbreviation == competition.HomeTeam.Abbreviation)
+                    .Select(t => t.TeamsId)
+                    .FirstAsync(cancellationToken);
+
+                var awayTeamId = await _db.Teams
+                    .Where(t => t.Abbreviation == competition.AwayTeam.Abbreviation)
+                    .Select(t => t.TeamsId)
+                    .FirstAsync(cancellationToken);
+
                 await _db.Competitions.AddAsync(new Models.Entities.Competitions()
                 {
-                    AwayTeamId = competition.AwayTeam.Id,
+                    AwayTeamId = awayTeamId,
                     AwayTeamScoreUrl =
-                        $"{_apiUrl}/events/{competition.CompetitionId}/competitions/{competition.CompetitionId}/competitors/{competition.AwayTeam.Id}/score",
-                    EspnCompetitionId = competition.CompetitionId,
+                        $"{_apiUrl}/events/{competition.EspnCompetitonId}/competitions/{competition.EspnCompetitonId}/competitors/{competition.AwayTeam.Id}/score",
+                    EspnCompetitionId = competition.EspnCompetitonId,
                     GameDate = competition.GameDate,
                     GameName = competition.GameName,
-                    HomeTeamId = competition.HomeTeam.Id,
+                    HomeTeamId = homeTeamId,
                     HomeTeamScoreUrl =
-                        $"{_apiUrl}/events/{competition.CompetitionId}/competitions/{competition.CompetitionId}/competitors/{competition.HomeTeam.Id}/score",
+                        $"{_apiUrl}/events/{competition.EspnCompetitonId}/competitions/{competition.EspnCompetitonId}/competitors/{competition.HomeTeam.Id}/score",
                     Odds = competition.Odds,
                     SeasonWeeksId = lastSeasonWeek.SeasonWeeksId,
                 }, cancellationToken);

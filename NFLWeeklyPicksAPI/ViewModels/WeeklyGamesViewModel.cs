@@ -1,4 +1,7 @@
-﻿namespace NFLWeeklyPicksAPI.ViewModels
+﻿using System.Linq.Expressions;
+using NFLWeeklyPicksAPI.Models.Entities;
+
+namespace NFLWeeklyPicksAPI.ViewModels
 {
     public class WeeklyGamesViewModel
     {
@@ -18,12 +21,33 @@
 
     public class WeeklyGameViewModel
     {
-        public long CompetitionId { get; set; }
+        public int CompetitionId { get; set; }
+        public long EspnCompetitonId { get; set; }
         public string GameName { get; set; }
         public DateTime GameDate { get; set; }
         public TeamViewModel HomeTeam { get; set; }
         public TeamViewModel AwayTeam { get; set; }
         public string Odds { get; set; }
+
+        internal static Expression<Func<Competitions, WeeklyGameViewModel>> Selector =>
+            record => new WeeklyGameViewModel()
+            {
+                CompetitionId = record.CompetitionsId,
+                EspnCompetitonId = record.EspnCompetitionId,
+                GameName = record.GameName,
+                GameDate = record.GameDate,
+                Odds = record.Odds,
+                HomeTeam = new TeamWithScoreViewModel()
+                {
+                    Id = record.HomeTeamId,
+                    Record = record.HomeTeamScoreUrl
+                },
+                AwayTeam = new TeamWithScoreViewModel()
+                {
+                    Id = record.AwayTeamId,
+                    Record = record.AwayTeamScoreUrl
+                }
+            };
     }
 
     public class WeeklyGameWithScoreViewModel : WeeklyGameViewModel
@@ -31,7 +55,28 @@
         public TeamWithScoreViewModel HomeTeam { get; set; }
         public TeamWithScoreViewModel AwayTeam { get; set; }
         public List<UserPickScoreViewModel> UserPicks { get; set; }
+
+        internal static Expression<Func<Competitions, WeeklyGameWithScoreViewModel>> Selector =>
+            record => new WeeklyGameWithScoreViewModel()
+            {
+                CompetitionId = record.CompetitionsId,
+                EspnCompetitonId = record.EspnCompetitionId,
+                GameName = record.GameName,
+                GameDate = record.GameDate,
+                Odds = record.Odds,
+                HomeTeam = new TeamWithScoreViewModel()
+                {
+                    Id = record.HomeTeamId,
+                    Record = record.HomeTeamScoreUrl
+                },
+                AwayTeam = new TeamWithScoreViewModel()
+                {
+                    Id = record.AwayTeamId,
+                    Record = record.AwayTeamScoreUrl
+                }
+            };
     }
+
 
     public class UserPickScoreViewModel
     {
@@ -59,6 +104,7 @@
     public class TeamViewModel
     {
         public int Id { get; set; }
+        public int EspnTeamId { get; set; }
         public string Location { get; set; }
         public string Nickname { get; set; }
         public string FullName { get; set; }

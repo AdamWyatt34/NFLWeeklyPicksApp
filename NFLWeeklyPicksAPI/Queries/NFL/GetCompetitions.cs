@@ -27,12 +27,14 @@ namespace NFLWeeklyPicksAPI.Queries.NFL
 
             public async Task<WeeklyGameViewModel> Handle(GetCompetitions request, CancellationToken cancellationToken)
             {
-
                 var client = _httpClient.CreateClientWithUrl(request.CompetitionUrls.Ref);
-                var competition = await client.GetFromJsonAsync<CompetitionModel>(request.CompetitionUrls.Ref, cancellationToken);
+                var competition =
+                    await client.GetFromJsonAsync<CompetitionModel>(request.CompetitionUrls.Ref, cancellationToken);
                 var competitionId = int.Parse(competition.id);
-                var homeTeamId = int.Parse(competition.competitions.First().competitors.Where(c => c.homeAway == "home").First().id);
-                var awayTeamId = int.Parse(competition.competitions.First().competitors.Where(c => c.homeAway == "away").First().id);
+                var homeTeamId = int.Parse(competition.competitions.First().competitors.Where(c => c.homeAway == "home")
+                    .First().id);
+                var awayTeamId = int.Parse(competition.competitions.First().competitors.Where(c => c.homeAway == "away")
+                    .First().id);
 
                 var teams = await _dispatcher.Send(new GetTeams()
                 {
@@ -44,15 +46,17 @@ namespace NFLWeeklyPicksAPI.Queries.NFL
                     }
                 }, cancellationToken);
 
-                var odds = await _dispatcher.Send(new GetCompetitionsOdds() { CompetitoinId = competitionId }, cancellationToken);
+                var odds = await _dispatcher.Send(new GetCompetitionsOdds() { CompetitoinId = competitionId },
+                    cancellationToken);
 
                 var tempDate = DateTime.Parse(competition.date);
 
                 return new WeeklyGameViewModel
                 {
-                    CompetitionId = long.Parse(competition.id),
+                    EspnCompetitonId = long.Parse(competition.id),
                     GameName = competition.name,
-                    GameDate = new DateTime(tempDate.Year, tempDate.Month, tempDate.Day, tempDate.Hour, tempDate.Minute, tempDate.Second),
+                    GameDate = new DateTime(tempDate.Year, tempDate.Month, tempDate.Day, tempDate.Hour, tempDate.Minute,
+                        tempDate.Second),
                     HomeTeam = teams.Where(t => t.Id == homeTeamId).First(),
                     AwayTeam = teams.Where(t => t.Id == awayTeamId).First(),
                     Odds = odds

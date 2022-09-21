@@ -77,11 +77,11 @@ builder.Services.Configure<ClientAppOptions>(clientAppConfig);
 //     //Job to sync competitions
 // });
 
-builder.Services.AddQuartzHostedService(options =>
-{
-    //Shut down jobs gracefully.
-    options.WaitForJobsToComplete = true;
-});
+// builder.Services.AddQuartzHostedService(options =>
+// {
+//     //Shut down jobs gracefully.
+//     options.WaitForJobsToComplete = true;
+// });
 
 var app = builder.Build();
 

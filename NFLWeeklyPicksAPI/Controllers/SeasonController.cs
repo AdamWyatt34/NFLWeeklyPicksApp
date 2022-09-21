@@ -9,7 +9,7 @@ namespace NFLWeeklyPicksAPI.Controllers
 {
     [Route("api/season")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class SeasonController
     {
         private readonly IMediator _dispatcher;
@@ -22,5 +22,13 @@ namespace NFLWeeklyPicksAPI.Controllers
         [Route("{Season}/weeks"), HttpGet, ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IEnumerable<SeasonWeeksViewModel>> ListSeasonWeeks([FromRoute] ListSeasonWeeks query) =>
             await _dispatcher.Send(query);
+
+        [Route("{Season}/{Week}"), HttpGet, ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<WeeklyGamesViewModel> ListWeeklyGames([FromRoute] ListWeeklyGames query) =>
+            await _dispatcher.Send(query);
+
+        [Route("{Season}/{Week}/score"), HttpGet, ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<WeeklyGamesWithScoreViewModel> ListWeeklyGamesWithScore(
+            [FromRoute] ListWeeklyGamesWithScore query) => await _dispatcher.Send(query);
     }
 }
