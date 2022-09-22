@@ -18,7 +18,8 @@
 
     public class WeeklyGameViewModel
     {
-        public long CompetitionId { get; set; }
+        public int CompetitonId { get; set; }
+        public long EspnCompetitionId { get; set; }
         public string GameName { get; set; }
         public DateTime GameDate { get; set; }
         public TeamViewModel HomeTeam { get; set; }

@@ -61,13 +61,7 @@ namespace NFLWeeklyPicksUI.Pages.Authentication
 
         private async Task OnResetPassword(string value)
         {
-            _showSuccess = _showError = false;
-
-            var result = await AuthenticationService.ForgotPassword(value);
-            if (result == HttpStatusCode.OK)
-                _showSuccess = true;
-            else
-                _showError = true;
+            NavigationManager.NavigateTo("forgot-password");
         }
     }
 }

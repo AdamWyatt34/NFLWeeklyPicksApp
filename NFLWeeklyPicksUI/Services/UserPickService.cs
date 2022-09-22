@@ -13,15 +13,6 @@ public class UserPickService : IUserPickService
         _client = client;
     }
 
-    public async Task<WeeklyGamesWithScoreViewModel> GetPicksWithScores(int season, int week)
-    {
-        var result =
-            await _client.GetFromJsonAsync<WeeklyGamesWithScoreViewModel>(
-                $"api/NFL/weekly-scores?Season={season}&Week={week}");
-
-        return result;
-    }
-
     public async Task<List<UserPickWeeklyRecordViewModel>> GetUserRecords(int season, int week)
     {
         var result =

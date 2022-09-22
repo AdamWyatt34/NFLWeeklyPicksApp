@@ -95,7 +95,7 @@ namespace NFLWeeklyPicksAPI.ViewModels
 
     public class WeeklyGameWithScoreAndWinnerViewModel : WeeklyGameWithScoreViewModel
     {
-        public int WinningTeamId => HomeTeam.Score == AwayTeam.Score ? 0 :
+        public int WinningTeamId => Math.Abs(HomeTeam.Score - AwayTeam.Score) == 0 ? 0 :
             HomeTeam.Score > AwayTeam.Score ? HomeTeam.Id : AwayTeam.Id;
 
         public List<UserPickScoreViewModelWithWinner> UserPicks { get; set; }

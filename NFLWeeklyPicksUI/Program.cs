@@ -16,7 +16,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 var config = builder.Configuration;
 var apiSettings = config.GetSection("ApiSettings").Get<ApiOptions>();
-
+var pickConfig = config.GetSection("PickSettings");
+builder.Services.Configure<PickOptions>(pickConfig);
 Uri uri = new(apiSettings.Url);
 
 builder.Services.AddHttpClient("PicksAPI", (sp, cl) =>
@@ -28,6 +29,7 @@ builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>()?.CreateClie
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserPickService, UserPickService>();
+builder.Services.AddScoped<ISeasonWeekService, SeasonWeeksService>();
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();

@@ -31,7 +31,7 @@ namespace NFLWeeklyPicksAPI.Commands.Authentication
 
             public async Task<Unit> Handle(ForgotPassword request, CancellationToken cancellationToken)
             {
-                var user = await _userManager.FindByNameAsync(request.EmailAddress);
+                var user = await _userManager.FindByEmailAsync(request.EmailAddress);
                 if (user == null)
                     return Unit.Value;
 
@@ -40,7 +40,7 @@ namespace NFLWeeklyPicksAPI.Commands.Authentication
                 byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(emailToken);
                 var token = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
                 var url =
-                    $"{_clientOptions.Url}/forgot-password/?token={token}&email={user.Email}";
+                    $"{_clientOptions.Url}/reset-password/?token={token}&email={user.Email}";
                 //TODO Generate html body
                 var message = new Message(new string[] { user.Email }, "Reset Password token", url, null);
 

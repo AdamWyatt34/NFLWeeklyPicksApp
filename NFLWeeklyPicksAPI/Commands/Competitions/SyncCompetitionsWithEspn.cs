@@ -27,7 +27,7 @@ public class SyncCompetitionsWithEspn : IRequest<Unit>
             var lastSeasonWeek =
                 await _db.SeasonWeeks
                     .Include(sw => sw.Season)
-                    .Where(sw => sw.Season.Year == 2022 && sw.WeekNumber == 1)
+                    //.Where(sw => sw.Season.Year == 2022 && sw.WeekNumber == 1) 
                     .OrderByDescending(sw => sw.EndDate)
                     .FirstAsync(cancellationToken);
 

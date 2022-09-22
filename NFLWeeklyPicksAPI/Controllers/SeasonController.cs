@@ -9,7 +9,7 @@ namespace NFLWeeklyPicksAPI.Controllers
 {
     [Route("api/season")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class SeasonController
     {
         private readonly IMediator _dispatcher;

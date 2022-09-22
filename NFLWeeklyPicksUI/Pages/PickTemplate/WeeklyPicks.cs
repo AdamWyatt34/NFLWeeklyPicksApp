@@ -4,6 +4,7 @@ using NFLWeeklyPicksUI.Models;
 using Radzen;
 using System.Net.Http.Json;
 using System.Threading;
+using NFLWeeklyPicksUI.Services;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -16,6 +17,7 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
         [Inject] public NotificationService NotificationService { get; set; }
 
         [Inject] public NavigationManager NavigationManager { get; set; }
+        [Inject] public ISeasonWeekService SeasonWeekService { get; set; }
         [Parameter] public int? UserPickId { get; set; }
 
         [Parameter] public int? Season { get; set; }
@@ -37,25 +39,24 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
             if (UserPickId.HasValue)
             {
                 _pick = await Client.GetFromJsonAsync<UserPicks>($"api/user-pick/{UserPickId}/");
-                _games = await Client.GetFromJsonAsync<WeeklyGamesViewModel>(
-                    $"api/NFL/weekly-picks?Season={_pick.Season}&Week={_pick.Week}");
+                _games = await SeasonWeekService.ListWeeklyGames(_pick.Season, _pick.Week);
             }
             else
             {
-                _games = await Client.GetFromJsonAsync<WeeklyGamesViewModel>(
-                    $"api/NFL/weekly-picks?Season={Season}&Week={Week}");
+                _games = await SeasonWeekService.ListWeeklyGames(Season.Value, Week.Value);
             }
 
             _isLocked = _games.Games.First().GameDate <= DateTime.Now;
             _lastGame = _games.Games.Last();
             _games.Games.ForEach(game =>
             {
-                var pickLineInfo = _pick.PickLineItems.FirstOrDefault(pli => pli.CompetitionId == game.CompetitionId);
+                var pickLineInfo =
+                    _pick.PickLineItems.FirstOrDefault(pli => pli.CompetitionId == game.EspnCompetitionId);
                 if (game.Equals(_lastGame))
                 {
                     _pick.PickLineItems.Add(new UserPickLineItems
                     {
-                        CompetitionId = game.CompetitionId,
+                        CompetitionId = game.EspnCompetitionId,
                         PickTypeId = (int)PickType.WithPoints,
                         PickTeamId = pickLineInfo?.PickTeamId ?? 0,
                         TotalPoints = pickLineInfo?.TotalPoints ?? 0,
@@ -66,7 +67,7 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
                 {
                     _pick.PickLineItems.Add(new UserPickLineItems
                     {
-                        CompetitionId = game.CompetitionId,
+                        CompetitionId = game.EspnCompetitionId,
                         PickTypeId = (int)PickType.Default,
                         PickTeamId = pickLineInfo?.PickTeamId ?? 0,
                         TotalPoints = pickLineInfo?.TotalPoints ?? 0,

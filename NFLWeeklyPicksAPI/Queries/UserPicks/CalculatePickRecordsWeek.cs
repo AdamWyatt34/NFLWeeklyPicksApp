@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NFLWeeklyPicksAPI.Extensions;
 using NFLWeeklyPicksAPI.Models.ESPNDataModels;
 using NFLWeeklyPicksAPI.Queries.NFL;
+using NFLWeeklyPicksAPI.Queries.SeasonWeeks;
 using NFLWeeklyPicksAPI.ViewModels;
 
 namespace NFLWeeklyPicksAPI.Queries.UserPicks;
@@ -15,56 +16,43 @@ public class CalculatePickRecordsWeek : IRequest<List<UserPickWeeklyRecordViewMo
     public class Handler : IRequestHandler<CalculatePickRecordsWeek, List<UserPickWeeklyRecordViewModel>>
     {
         private readonly IMediator _dispatcher;
-        private readonly IHttpClientFactory _httpClient;
-        private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _db;
-        private readonly string _apiUrl;
 
-        public Handler(IMediator dispatcher, IHttpClientFactory httpClient, IConfiguration configuration,
-            ApplicationDbContext db)
+        public Handler(IMediator dispatcher, ApplicationDbContext db)
         {
             _dispatcher = dispatcher;
-            _httpClient = httpClient;
-            _configuration = configuration;
             _db = db;
-            _apiUrl = _configuration.GetValue<string>("ESPNAPIUrl");
         }
 
         public async Task<List<UserPickWeeklyRecordViewModel>> Handle(CalculatePickRecordsWeek request,
             CancellationToken cancellationToken)
         {
-            var apiUrl = $"{_apiUrl}/seasons/{request.Season}/types/2/weeks/{request.WeekNumber}/events";
-
-            var client = _httpClient.CreateClientWithUrl(apiUrl);
-
-            var weeklyGames = await client.GetFromJsonAsync<WeeklyGameModel>(apiUrl, cancellationToken);
+            var weeklyGames = await _dispatcher.Send(new ListWeeklyGamesWithScore()
+            {
+                Season = request.Season,
+                Week = request.WeekNumber
+            }, cancellationToken);
 
             List<WeeklyGameWithScoreAndWinnerViewModel> games = new();
 
-            foreach (var weeklyGame in weeklyGames.items)
+            foreach (var weeklyGame in weeklyGames.Games)
             {
-                var gameWithScore = await _dispatcher.Send(new GetCompetitionsWithScores()
-                {
-                    Season = request.Season,
-                    WeekNumber = request.WeekNumber,
-                    CompetitionUrls = weeklyGame
-                }, cancellationToken);
-
                 var game = new WeeklyGameWithScoreAndWinnerViewModel()
                 {
-                    AwayTeam = gameWithScore.AwayTeam,
-                    CompetitionId = gameWithScore.CompetitionId,
-                    GameDate = gameWithScore.GameDate,
-                    GameName = gameWithScore.GameName,
-                    HomeTeam = gameWithScore.HomeTeam,
-                    Odds = gameWithScore.Odds,
+                    AwayTeam = weeklyGame.AwayTeam,
+                    CompetitionId = weeklyGame.CompetitionId,
+                    EspnCompetitonId = weeklyGame.EspnCompetitonId,
+                    GameDate = weeklyGame.GameDate,
+                    GameName = weeklyGame.GameName,
+                    HomeTeam = weeklyGame.HomeTeam,
+                    Odds = weeklyGame.Odds,
                 };
 
                 var userPicks = await _db.UserPicks
                     .Include(up => up.PickLineItems)
                     .Where(up => up.Season == request.Season)
                     .Where(up => up.Week == request.WeekNumber)
-                    .Where(up => up.PickLineItems.Any(up => up.CompetitionId == game.CompetitionId))
+                    .Where(up => up.PickLineItems.Any(up => up.CompetitionId == game.EspnCompetitonId))
                     .ToListAsync(cancellationToken);
 
                 var userIds = userPicks.Select(up => up.UserId.ToString())
@@ -78,8 +66,6 @@ public class CalculatePickRecordsWeek : IRequest<List<UserPickWeeklyRecordViewMo
 
                 var picks = new List<UserPickScoreViewModelWithWinner>();
 
-                //Verify can replace all code above with dispatch to New ListWeeklyGamesWithScore
-                
                 var currentIndex = 0;
                 var user = userPicks.FirstOrDefault().UserId;
                 //Should be able to change loop just to populate is correct
@@ -95,7 +81,7 @@ public class CalculatePickRecordsWeek : IRequest<List<UserPickWeeklyRecordViewMo
                         user = pick.UserId;
                     }
 
-                    var selectedTeamId = pick.PickLineItems.First(pl => pl.CompetitionId == game.CompetitionId)
+                    var selectedTeamId = pick.PickLineItems.First(pl => pl.CompetitionId == game.EspnCompetitonId)
                         .PickTeamId;
                     var team = game.HomeTeam.Id == selectedTeamId ? game.HomeTeam : game.AwayTeam;
                     picks.Add(new UserPickScoreViewModelWithWinner()
@@ -128,12 +114,13 @@ public class CalculatePickRecordsWeek : IRequest<List<UserPickWeeklyRecordViewMo
                     .SelectMany(g => g.UserPicks)
                     .Where(up => up.UserPickId == userPick.UserPickId);
 
+                var userPickScoreViewModelWithWinners = usersPicks.ToList();
                 output.Add(new UserPickWeeklyRecordViewModel()
                 {
                     UserPickId = userPick.UserPickId,
                     UserPickDescription = $"{userPick.Username} - {userPick.UserPickNumber}",
-                    Losses = usersPicks.Count(up => !up.IsCorrect).ToString(),
-                    Wins = usersPicks.Count(up => up.IsCorrect).ToString()
+                    Losses = userPickScoreViewModelWithWinners.Count(up => !up.IsCorrect).ToString(),
+                    Wins = userPickScoreViewModelWithWinners.Count(up => up.IsCorrect).ToString()
                 });
             }
 

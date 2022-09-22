@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using NFLWeeklyPicksUI.Models;
-using System.Net.Http.Json;
-using System.Security.Principal;
-using Microsoft.AspNetCore.WebUtilities;
 using NFLWeeklyPicksUI.Services;
 
 namespace NFLWeeklyPicksUI.Pages.PickWeeks
 {
     public partial class ListSeasonWeeks
     {
-        [Inject] public HttpClient Client { get; set; }
+        [Inject] public ISeasonWeekService SeasonWeekService { get; set; }
 
         [Inject] public NavigationManager NavigationManager { get; set; }
         [Inject] public HttpInterceptorService Interceptor { get; set; }
@@ -21,8 +18,7 @@ namespace NFLWeeklyPicksUI.Pages.PickWeeks
         {
             Interceptor.RegisterEvent();
             Interceptor.RegisterBeforeSendEvent();
-            _seasonWeeks =
-                await Client.GetFromJsonAsync<List<SeasonWeeksViewModel>>($"api/season/{_currentSeason}/weeks");
+            _seasonWeeks = (await SeasonWeekService.ListSeasonWeeks(_currentSeason)).ToList();
         }
 
         public void Dispose() => Interceptor.DisposeEvent();
