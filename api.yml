@@ -43,7 +43,7 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: Restore App
   inputs:
-    projects: $(System.DefaultWorkingDirectory)/NFLWeeklyPicksAPI.csproj
+    projects: $(System.DefaultWorkingDirectory)/NFLWeeklyPicksAPI/NFLWeeklyPicksAPI.csproj
     command: publish
     publishWebProjects: false
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
