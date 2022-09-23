@@ -65,7 +65,7 @@ steps:
    dotnet tool install --global dotnet-ef
    
    $content = gc .\appsettings.json -raw | ConvertFrom-Json
-   $content.ConnectionStrings.Default=$(SQLDbConnString)
+   $content.ConnectionStrings.Default=${env:SQLDBCONNSTRING}
    $content | ConvertTo-Json | Set-Content .\appsettings.json
    
    dotnet ef database update $(Initial_Create)
