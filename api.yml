@@ -29,7 +29,7 @@ steps:
 
 - task: VSBuild@1
   inputs:
-    solution: '$(solution)'
+    solution: '**\NFLWeeklyPicksAPI\*.csproj'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
@@ -69,7 +69,7 @@ steps:
    $content | ConvertTo-Json | Set-Content .\appsettings.json
    
    dotnet ef database update $(Initial_Create)
-  workingDirectory: MyProjectDirectory/data
+  workingDirectory: NFLWeeklyPicksAPI/Migrations
   displayName: 'Initial Migration Script'
 
 - powershell: |
