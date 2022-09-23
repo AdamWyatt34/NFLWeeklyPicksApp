@@ -45,7 +45,7 @@ steps:
   inputs:
     projects: $(System.DefaultWorkingDirectory)/NFLWeeklyPicksAPI.csproj
     command: publish
-    publishWebProjects: True
+    publishWebProjects: false
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
   
