@@ -77,7 +77,7 @@ steps:
 - powershell: |
    dotnet tool install --global dotnet-ef
    dotnet ef migrations script --output $(Build.ArtifactStagingDirectory)/migrations_script.sql --context $(SQLDbContext) --idempotent
-  workingDirectory: NFLWeeklyPicksAPI/Migrations
+  workingDirectory: NFLWeeklyPicksAPI
   displayName: 'Create Migration Script'
 
 
