@@ -1,0 +1,98 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+  branches:
+   include:
+     - master
+  paths:
+   include:
+   - NFLWeeklyPicksAPI
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  SQLDbContext: 'ApplicationDbContext'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '**\NFLWeeklyPicksAPI\*.csproj'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    clean: true
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Restore App
+  inputs:
+    projects: $(System.DefaultWorkingDirectory)/NFLWeeklyPicksAPI/NFLWeeklyPicksAPI.csproj
+    command: publish
+    publishWebProjects: false
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+  
+
+- task: DotNetCoreCLI@2
+  displayName: New Manifest for tool
+  inputs:
+    command: custom
+    custom: 'new '
+    arguments: tool-manifest
+
+- task: DotNetCoreCLI@2
+  displayName: Install EF Tool
+  inputs:
+    command: custom
+    custom: 'tool '
+    arguments: install dotnet-ef
+
+- powershell: |
+   dotnet tool install --global dotnet-ef
+   
+   $content = gc .\appsettings.json -raw | ConvertFrom-Json
+   $content.ConnectionStrings.Default=${env:SQLDBCONNSTRING}
+   $content | ConvertTo-Json | Set-Content .\appsettings.json
+   
+   dotnet ef database update $(Initial_Create)
+  workingDirectory: NFLWeeklyPicksAPI
+  displayName: 'Initial Migration Script'
+
+- powershell: |
+   dotnet tool install --global dotnet-ef
+   dotnet ef migrations script --output $(Build.ArtifactStagingDirectory)/migrations_script.sql --context $(SQLDbContext) --idempotent
+  workingDirectory: NFLWeeklyPicksAPI
+  displayName: 'Create Migration Script'
+
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Data Migrations'
+  inputs:
+    ArtifactName: 'Data_Migrations'
+- task: PublishSymbols@2
+  inputs:
+    SearchPattern: '**/bin/**/*.pdb'
+    PublishSymbols: false
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Pipeline.Workspace)'
+    artifact: 'drop'
+    publishLocation: 'pipeline'
