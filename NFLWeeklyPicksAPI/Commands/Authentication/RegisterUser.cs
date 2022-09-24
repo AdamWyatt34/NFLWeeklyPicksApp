@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using NFLWeeklyPicksAPI.Models.Entities;
 using System.Text;
+using Microsoft.Extensions.Options;
+using NFLWeeklyPicksAPI.Options;
 
 namespace NFLWeeklyPicksAPI.Commands.Authentication
 {
@@ -17,12 +19,15 @@ namespace NFLWeeklyPicksAPI.Commands.Authentication
             private readonly IMapper _mapper;
             private readonly UserManager<User> _userManager;
             private readonly IEmailSender _emailSender;
+            private readonly ClientAppOptions _clientOptions;
 
-            public Handler(IMapper mapper, UserManager<User> userManager, IEmailSender emailSender)
+            public Handler(IMapper mapper, UserManager<User> userManager, IEmailSender emailSender,
+                IOptions<ClientAppOptions> clientOptions)
             {
                 _mapper = mapper;
                 _userManager = userManager;
                 _emailSender = emailSender;
+                _clientOptions = clientOptions.Value;
             }
 
             public async Task<IdentityResult> Handle(RegisterUser request, CancellationToken cancellationToken)
@@ -45,7 +50,7 @@ namespace NFLWeeklyPicksAPI.Commands.Authentication
                 var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(emailToken);
                 var token = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
-                var url = $"https://localhost:7066/confirm-email/?token={token}&email={user.Email}";
+                var url = $"{_clientOptions.Url}/confirm-email/?token={token}&email={user.Email}";
 
                 var message = new Message(new string[] { user.Email }, "Confirm Email", url, null);
 

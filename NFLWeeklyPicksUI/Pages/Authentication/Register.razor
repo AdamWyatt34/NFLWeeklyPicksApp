@@ -12,68 +12,79 @@
         }
     </ul>
 }
+
+@if (_showSuccess)
+{
+    <div class="alert alert-success" role="alert">
+        A link has been sent to the email provided. Please click the link in the email to complete registration.
+    </div>
+    <div class="alert alert-success" role="alert">
+        Return to <a href="/login">log in</a> to log in after registration is complete.
+    </div>
+}
+
 <RadzenTemplateForm Data=@_registerUser Submit="@(async (RegisterUserViewModel args) => { await Submit(args); })">
     <div class="col-md-6">
-         <div class="row">
+        <div class="row">
             <div class="col-md-4 align-items-center d-flex">
-                <RadzenLabel Text="Username" />
+                <RadzenLabel Text="Username"/>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox @bind-Value=@_registerUser.UserName style="width: 100%;" Name="Username" />
+                <RadzenTextBox @bind-Value=@_registerUser.UserName style="width: 100%;" Name="Username"/>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 align-items-center d-flex">
-                <RadzenLabel Text="Email Address" />
+                <RadzenLabel Text="Email Address"/>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox @bind-Value=@_registerUser.Email style="width: 100%;" Name="EmailAddress" />
+                <RadzenTextBox @bind-Value=@_registerUser.Email style="width: 100%;" Name="EmailAddress"/>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 align-items-center d-flex">
-                <RadzenLabel Text="First Name" />
+                <RadzenLabel Text="First Name"/>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox @bind-Value=@_registerUser.FirstName style="width: 100%;" Name="FirstName" />
+                <RadzenTextBox @bind-Value=@_registerUser.FirstName style="width: 100%;" Name="FirstName"/>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 align-items-center d-flex">
-                <RadzenLabel Text="LastName" />
+                <RadzenLabel Text="LastName"/>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox @bind-Value=@_registerUser.LastName style="width: 100%;" Name="LastName" />
+                <RadzenTextBox @bind-Value=@_registerUser.LastName style="width: 100%;" Name="LastName"/>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 align-items-center d-flex">
-                <RadzenLabel Text="Password" />
+                <RadzenLabel Text="Password"/>
             </div>
             <div class="col-md-8">
-                <RadzenPassword @bind-Value=@_registerUser.Password style="width: 100%;" Name="Password" />
+                <RadzenPassword @bind-Value=@_registerUser.Password style="width: 100%;" Name="Password"/>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 align-items-center d-flex">
-                <RadzenLabel Text="Confirm Password" />
+                <RadzenLabel Text="Confirm Password"/>
             </div>
             <div class="col-md-8">
-                <RadzenPassword @bind-Value=@_registerUser.ConfirmPassword style="width: 100%;" Name="ConfirmPassword" />
+                <RadzenPassword @bind-Value=@_registerUser.ConfirmPassword style="width: 100%;" Name="ConfirmPassword"/>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 align-items-center d-flex">
-                <RadzenLabel Text="Phone #" />
+                <RadzenLabel Text="Phone #"/>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox @bind-Value=@_registerUser.PhoneNumber style="width: 100%;" Name="PhoneNumber" />
+                <RadzenTextBox @bind-Value=@_registerUser.PhoneNumber style="width: 100%;" Name="PhoneNumber"/>
             </div>
         </div>
     </div>
     <div class="row justify-content-center">
         <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
-            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" />
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save"/>
         </div>
     </div>
 </RadzenTemplateForm>

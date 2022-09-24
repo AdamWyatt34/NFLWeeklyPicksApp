@@ -13,6 +13,7 @@ namespace NFLWeeklyPicksUI.Pages.Authentication
         public IAuthenticationService AuthenticationService { get; set; }
 
         private bool _hasErrors = false;
+        private bool _showSuccess = false;
         private IEnumerable<IdentityError>? Errors { get; set; }
 
         private async Task Submit(RegisterUserViewModel registerUser)
@@ -23,6 +24,10 @@ namespace NFLWeeklyPicksUI.Pages.Authentication
             {
                 Errors = result.Errors;
                 _hasErrors = true;
+            }
+            else
+            {
+                _showSuccess = true;
             }
         }
     }
