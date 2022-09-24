@@ -64,16 +64,17 @@ steps:
     custom: 'tool '
     arguments: install dotnet-ef
 
-- powershell: |
-   dotnet tool install --global dotnet-ef
+# Uncomment if deploying to new environment
+# - powershell: |
+#    dotnet tool install --global dotnet-ef
    
-   $content = gc .\appsettings.json -raw | ConvertFrom-Json
-   $content.ConnectionStrings.Default=${env:SQLDBCONNSTRING}
-   $content | ConvertTo-Json | Set-Content .\appsettings.json
+#    $content = gc .\appsettings.json -raw | ConvertFrom-Json
+#    $content.ConnectionStrings.Default=${env:SQLDBCONNSTRING}
+#    $content | ConvertTo-Json | Set-Content .\appsettings.json
    
-   dotnet ef database update $(Initial_Create)
-  workingDirectory: NFLWeeklyPicksAPI
-  displayName: 'Initial Migration Script'
+#    dotnet ef database update $(Initial_Create)
+#   workingDirectory: NFLWeeklyPicksAPI
+#   displayName: 'Initial Migration Script'
 
 - powershell: |
    dotnet tool install --global dotnet-ef
