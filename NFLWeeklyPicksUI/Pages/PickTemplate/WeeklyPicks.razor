@@ -27,7 +27,7 @@ else
         {
             <PickRow
                 Game=@game
-                PickLine=@_pick.PickLineItems.Where(pli => pli.CompetitionId == game.EspnCompetitionId).FirstOrDefault()
+                PickLine=@_pick.PickLineItems.FirstOrDefault(pli => pli.CompetitionId == game.CompetitionId)
                 isLocked=@_isLocked/>
         }
         <PointEntry LastGame=@_lastGame LastGamePickLineItem=@_lastPickLineItem isLocked=@_isLocked/>

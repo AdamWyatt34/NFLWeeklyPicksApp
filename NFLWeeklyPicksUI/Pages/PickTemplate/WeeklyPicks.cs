@@ -54,12 +54,12 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
             _games.Games.ForEach(game =>
             {
                 var pickLineInfo =
-                    _pick.PickLineItems.FirstOrDefault(pli => pli.CompetitionId == game.EspnCompetitionId);
+                    _pick.PickLineItems.FirstOrDefault(pli => pli.CompetitionId == game.CompetitionId);
                 if (game.Equals(_lastGame))
                 {
                     _pick.PickLineItems.Add(new UserPickLineItems
                     {
-                        CompetitionId = game.EspnCompetitionId,
+                        CompetitionId = game.CompetitionId,
                         PickTypeId = (int)PickType.WithPoints,
                         PickTeamId = pickLineInfo?.PickTeamId ?? 0,
                         TotalPoints = pickLineInfo?.TotalPoints ?? 0,
@@ -70,7 +70,7 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
                 {
                     _pick.PickLineItems.Add(new UserPickLineItems
                     {
-                        CompetitionId = game.EspnCompetitionId,
+                        CompetitionId = game.CompetitionId,
                         PickTypeId = (int)PickType.Default,
                         PickTeamId = pickLineInfo?.PickTeamId ?? 0,
                         TotalPoints = pickLineInfo?.TotalPoints ?? 0,
@@ -106,6 +106,7 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
                     Summary = $"Week {picks.Week} picks successfully submitted",
                     Duration = 4000
                 });
+                _isBusy = false;
             }
             else
             {
@@ -116,6 +117,7 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
                     Detail = "Please try again.",
                     Duration = 4000
                 });
+                _isBusy = false;
             }
 
             _isBusy = false;

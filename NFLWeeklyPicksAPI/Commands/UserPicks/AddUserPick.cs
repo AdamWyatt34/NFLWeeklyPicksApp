@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NFLWeeklyPicksAPI.Extensions;
 using NFLWeeklyPicksAPI.Models.Entities;
-using NFLWeeklyPicksAPI.ViewModels;
 
 namespace NFLWeeklyPicksAPI.Commands
 {
