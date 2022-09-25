@@ -27,9 +27,12 @@ public class UpdateUserPick : IRequest<Unit>
             List<Models.Entities.UserPickLineItems> picks = new();
             foreach (var pick in request.UserPick.PickLineItems)
             {
+                var competition = await _db.Competitions.FirstAsync(c => c.CompetitionsId == pick.CompetitionId,
+                    cancellationToken: cancellationToken);
                 var pickLine = new Models.Entities.UserPickLineItems
                 {
                     CompetitionId = pick.CompetitionId,
+                    Competition = competition,
                     PickTeamId = pick.PickTeamId,
                     PickTypeId = pick.PickTypeId,
                     PickPoints = pick.TotalPoints
