@@ -29,6 +29,7 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
         private WeeklyGameViewModel _lastGame;
         private UserPickLineItems _lastPickLineItem;
         private bool _isLocked;
+        private bool _isBusy = false;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 #pragma warning disable CS8601 // Possible null reference assignment.
@@ -83,6 +84,7 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
 
         private async void Submit(UserPicks picks)
         {
+            _isBusy = true;
             var requestObject = new UserPicksRequestObject();
 
             picks.Season = _games.Season;
@@ -115,6 +117,8 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
                     Duration = 4000
                 });
             }
+
+            _isBusy = false;
         }
 
         private void Cancel()
