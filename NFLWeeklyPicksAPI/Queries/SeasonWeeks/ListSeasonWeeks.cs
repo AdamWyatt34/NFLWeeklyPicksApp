@@ -43,20 +43,21 @@ namespace NFLWeeklyPicksAPI.Queries.SeasonWeeks
                 CancellationToken cancellationToken)
             {
                 var currentUser = await _contextAccessor.HttpContext.GetCurrentUser(_userManager);
-                var currentIndex = 0;
+
 
                 foreach (var viewModel in viewModels)
                 {
-                    currentIndex++;
+                    //currentIndex++;
                     var userPicks = await _db.UserPicks
                         .Where(
                             u => u.Season == viewModel.Season && u.Week == viewModel.WeekNumber &&
                                  u.UserId == Guid.Parse(currentUser.Id))
                         .Select(u => u.UserPicksId)
                         .ToListAsync(cancellationToken);
-
+                    var currentIndex = 0;
                     foreach (var userPick in userPicks)
                     {
+                        currentIndex++;
                         viewModel.UserPicks.Add(new SeasonWeekUserPickViewModel()
                         {
                             UserPickId = userPick,
