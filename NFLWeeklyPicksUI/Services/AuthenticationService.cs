@@ -29,7 +29,7 @@ namespace NFLWeeklyPicksUI.Services
         public async Task<bool> ConfirmEmail(string token, string email)
         {
             var postBody = new { token, email };
-            var confirmation = await _client.PostAsJsonAsync("/api/authentication/confirm-email", postBody);
+            var confirmation = await _client.PostAsJsonAsync("api/authentication/confirm-email", postBody);
 
             return await confirmation.Content.ReadFromJsonAsync<bool>();
         }
@@ -37,7 +37,7 @@ namespace NFLWeeklyPicksUI.Services
         public async Task<LoginToken> Login(string username, string password)
         {
             var body = new { username, password };
-            var login = await _client.PostAsJsonAsync("/api/authentication/login", body);
+            var login = await _client.PostAsJsonAsync("api/authentication/login", body);
 
             var token = await login.Content.ReadFromJsonAsync<LoginToken>();
 
@@ -70,7 +70,7 @@ namespace NFLWeeklyPicksUI.Services
 
             var body = new { AccessToken = authToken, RefreshToken = refreshToken };
 
-            var response = await _client.PostAsJsonAsync("/api/token/refresh", new
+            var response = await _client.PostAsJsonAsync("api/token/refresh", new
             {
                 Token = body
             });
@@ -94,7 +94,7 @@ namespace NFLWeeklyPicksUI.Services
 
         public async Task<HttpStatusCode> ForgotPassword(string emailAddress)
         {
-            var result = await _client.PostAsJsonAsync("/api/authentication/forgot-password",
+            var result = await _client.PostAsJsonAsync("api/authentication/forgot-password",
                 new { EmailAddress = emailAddress });
 
             return result.StatusCode;
@@ -102,7 +102,7 @@ namespace NFLWeeklyPicksUI.Services
 
         public async Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
-            var result = await _client.PostAsJsonAsync("/api/authentication/reset-password", resetPasswordModel);
+            var result = await _client.PostAsJsonAsync("api/authentication/reset-password", resetPasswordModel);
 
             return await result.Content.ReadFromJsonAsync<bool>();
         }
@@ -110,7 +110,7 @@ namespace NFLWeeklyPicksUI.Services
         public async Task<LoginToken> TwoFactorVerification(string email, string provider, string twoFactorToken)
         {
             var body = new { Email = email, provider = provider, TwoFactorToken = twoFactorToken };
-            var login = await _client.PostAsJsonAsync("/api/authentication/verify-two-factor", body);
+            var login = await _client.PostAsJsonAsync("api/authentication/verify-two-factor", body);
 
             var token = await login.Content.ReadFromJsonAsync<LoginToken>();
 
@@ -127,7 +127,7 @@ namespace NFLWeeklyPicksUI.Services
         public async Task<IdentityResult> RegisterUser(RegisterUserViewModel registerUser)
         {
             var body = new { UserForRegistration = registerUser };
-            var register = await _client.PostAsJsonAsync("/api/authentication", body);
+            var register = await _client.PostAsJsonAsync("api/authentication", body);
 
             return await register.Content.ReadFromJsonAsync<IdentityResult>();
         }
