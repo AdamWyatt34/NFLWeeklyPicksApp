@@ -30,6 +30,7 @@ namespace NFLWeeklyPicksAPI.Queries.SeasonWeeks
             {
                 var viewModels = await _db.SeasonWeeks
                     .Where(sw => sw.Season.Year == request.Season)
+                    .OrderBy(sw => sw.StartDate)
                     .Select(SeasonWeeksViewModel.Selector)
                     .ToListAsync(cancellationToken);
 
