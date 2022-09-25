@@ -52,7 +52,7 @@ public class CalculatePickRecordsWeek : IRequest<List<UserPickWeeklyRecordViewMo
                     .Include(up => up.PickLineItems)
                     .Where(up => up.Season == request.Season)
                     .Where(up => up.Week == request.WeekNumber)
-                    .Where(up => up.PickLineItems.Any(up => up.CompetitionId == game.EspnCompetitonId))
+                    .Where(up => up.PickLineItems.Any(up => up.CompetitionId == game.CompetitionId))
                     .ToListAsync(cancellationToken);
 
                 var userIds = userPicks.Select(up => up.UserId.ToString())
@@ -81,7 +81,7 @@ public class CalculatePickRecordsWeek : IRequest<List<UserPickWeeklyRecordViewMo
                         user = pick.UserId;
                     }
 
-                    var selectedTeamId = pick.PickLineItems.First(pl => pl.CompetitionId == game.EspnCompetitonId)
+                    var selectedTeamId = pick.PickLineItems.First(pl => pl.CompetitionId == game.CompetitionId)
                         .PickTeamId;
                     var team = game.HomeTeam.Id == selectedTeamId ? game.HomeTeam : game.AwayTeam;
                     picks.Add(new UserPickScoreViewModelWithWinner()

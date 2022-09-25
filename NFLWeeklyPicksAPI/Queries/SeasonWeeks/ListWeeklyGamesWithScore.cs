@@ -95,7 +95,7 @@ public class ListWeeklyGamesWithScore : IRequest<WeeklyGamesWithScoreViewModel>
                 //Populate User Picks
                 var userPicks = await _db.UserPicks
                     .Include(up => up.PickLineItems)
-                    .Where(up => up.PickLineItems.Any(up => up.CompetitionId == viewModel.EspnCompetitonId))
+                    .Where(up => up.PickLineItems.Any(up => up.CompetitionId == viewModel.CompetitionId))
                     .ToListAsync(cancellationToken);
 
                 var userIds = userPicks.Select(up => up.UserId.ToString())
@@ -128,9 +128,9 @@ public class ListWeeklyGamesWithScore : IRequest<WeeklyGamesWithScoreViewModel>
                     }
 
 
-                    var selectedTeamId = pick.PickLineItems.First(pl => pl.CompetitionId == viewModel.EspnCompetitonId)
+                    var selectedTeamId = pick.PickLineItems.First(pl => pl.CompetitionId == viewModel.CompetitionId)
                         .PickTeamId;
-                    var team = teams.Find(t => t.EspnTeamId == selectedTeamId);
+                    var team = teams.Find(t => t.TeamsId == selectedTeamId);
                     picks.Add(new UserPickScoreViewModel()
                     {
                         SelectedTeam = team.FullName,
