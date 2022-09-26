@@ -9,12 +9,11 @@ namespace NFLWeeklyPicksUI.Pages.Authentication
     {
         private RegisterUserViewModel _registerUser = new();
 
-        [Inject]
-        public IAuthenticationService AuthenticationService { get; set; }
+        [Inject] public IAuthenticationService AuthenticationService { get; set; }
 
         private bool _hasErrors = false;
         private bool _showSuccess = false;
-        private IEnumerable<IdentityError>? Errors { get; set; }
+        private IEnumerable<RegisterErrorViewModel>? Errors { get; set; }
 
         private async Task Submit(RegisterUserViewModel registerUser)
         {

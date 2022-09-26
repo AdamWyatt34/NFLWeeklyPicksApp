@@ -6,7 +6,7 @@ namespace NFLWeeklyPicksUI.Services
 {
     public interface IAuthenticationService
     {
-        Task<IdentityResult> RegisterUser(RegisterUserViewModel registerUser);
+        Task<RegisterResponseViewModel> RegisterUser(RegisterUserViewModel registerUser);
 
         Task<bool> ConfirmEmail(string token, string email);
 

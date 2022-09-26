@@ -124,12 +124,12 @@ namespace NFLWeeklyPicksUI.Services
         }
 
 
-        public async Task<IdentityResult> RegisterUser(RegisterUserViewModel registerUser)
+        public async Task<RegisterResponseViewModel> RegisterUser(RegisterUserViewModel registerUser)
         {
             var body = new { UserForRegistration = registerUser };
             var register = await _client.PostAsJsonAsync("api/authentication", body);
 
-            return await register.Content.ReadFromJsonAsync<IdentityResult>();
+            return await register.Content.ReadFromJsonAsync<RegisterResponseViewModel>();
         }
     }
 }

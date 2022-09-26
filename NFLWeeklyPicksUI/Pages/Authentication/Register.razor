@@ -25,60 +25,70 @@
 
 <RadzenTemplateForm Data=@_registerUser Submit="@(async (RegisterUserViewModel args) => { await Submit(args); })">
     <div class="col-md-6">
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-md-4 align-items-center d-flex">
                 <RadzenLabel Text="Username"/>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox @bind-Value=@_registerUser.UserName style="width: 100%;" Name="Username"/>
+                <RadzenTextBox @bind-Value=@_registerUser.UserName style="width: 100%; display: block;" Name="Username"/>
+                <RadzenRequiredValidator Component="Username" Text="Enter Username" Popup="true" Style="position: absolute"/>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-md-4 align-items-center d-flex">
                 <RadzenLabel Text="Email Address"/>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox @bind-Value=@_registerUser.Email style="width: 100%;" Name="EmailAddress"/>
+                <RadzenTextBox @bind-Value=@_registerUser.Email style="width: 100%; display: block;" Name="EmailAddress"/>
+                <RadzenRequiredValidator Component="EmailAddress" Text="Enter Email Address" Popup="true"/>
+                <RadzenEmailValidator Component="EmailAddress" Text="Provide a valid email address" Popup="true" Style="position: absolute"/>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-md-4 align-items-center d-flex">
                 <RadzenLabel Text="First Name"/>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox @bind-Value=@_registerUser.FirstName style="width: 100%;" Name="FirstName"/>
+                <RadzenTextBox @bind-Value=@_registerUser.FirstName style="width: 100%; display: block;" Name="FirstName"/>
+                <RadzenRequiredValidator Component="FirstName" Text="Enter First Name" Popup="true" Style="position: absolute"/>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-md-4 align-items-center d-flex">
-                <RadzenLabel Text="LastName"/>
+                <RadzenLabel Text="Last Name"/>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox @bind-Value=@_registerUser.LastName style="width: 100%;" Name="LastName"/>
+                <RadzenTextBox @bind-Value=@_registerUser.LastName style="width: 100%;display: block;" Name="LastName"/>
+                <RadzenRequiredValidator Component="LastName" Text="Enter Last Name" Popup="true" Style="position: absolute"/>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-md-4 align-items-center d-flex">
                 <RadzenLabel Text="Password"/>
             </div>
             <div class="col-md-8">
-                <RadzenPassword @bind-Value=@_registerUser.Password style="width: 100%;" Name="Password"/>
+                <RadzenPassword @bind-Value=@_registerUser.Password style="width: 100%; display: block;" Name="Password"/>
+                <RadzenRequiredValidator Component="Password" Text="Enter Password" Popup="true" Style="position: absolute"/>
+                <RadzenLengthValidator Component="Password" Min="10" Text="Password should be at least 10 characters" Popup="true" Style="position: absolute"/>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-md-4 align-items-center d-flex">
                 <RadzenLabel Text="Confirm Password"/>
             </div>
             <div class="col-md-8">
-                <RadzenPassword @bind-Value=@_registerUser.ConfirmPassword style="width: 100%;" Name="ConfirmPassword"/>
+                <RadzenPassword @bind-Value=@_registerUser.ConfirmPassword style="width: 100%; display: block;" Name="ConfirmPassword"/>
+                <RadzenRequiredValidator Component="ConfirmPassword" Text="Confirm Password" Popup="true" Style="position: absolute"/>
+                <RadzenCompareValidator Visible=@(!string.IsNullOrEmpty(_registerUser.ConfirmPassword)) Value=@_registerUser.Password Component="ConfirmPassword" Text="Passwords must match" Popup="true" Style="position: absolute"/>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-md-4 align-items-center d-flex">
                 <RadzenLabel Text="Phone #"/>
             </div>
             <div class="col-md-8">
-                <RadzenTextBox @bind-Value=@_registerUser.PhoneNumber style="width: 100%;" Name="PhoneNumber"/>
+                <RadzenTextBox @bind-Value=@_registerUser.PhoneNumber style="width: 100%; display: block;" Name="PhoneNumber"/>
+                <RadzenRequiredValidator Component="PhoneNumber" Text="Enter Phone Number" Popup="true" Style="position: absolute"/>
             </div>
         </div>
     </div>
