@@ -24,7 +24,15 @@ namespace NFLWeeklyPicksUI.Pages.Authentication
 
         public async Task OnLogin(LoginArgs args)
         {
-            var result = await AuthenticationService.Login(args.Username, args.Password);
+            LoginToken result = new();
+            try
+            {
+                result = await AuthenticationService.Login(args.Username, args.Password);
+            }
+            catch (Exception e)
+            {
+                _showError = true;
+            }
 
             if (result.AccessToken == "2FARequired")
             {

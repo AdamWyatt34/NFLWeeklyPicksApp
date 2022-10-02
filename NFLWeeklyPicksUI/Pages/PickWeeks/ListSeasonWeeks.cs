@@ -16,8 +16,8 @@ namespace NFLWeeklyPicksUI.Pages.PickWeeks
 
         protected override async Task OnInitializedAsync()
         {
-            Interceptor.RegisterEvent();
-            Interceptor.RegisterBeforeSendEvent();
+            // Interceptor.RegisterEvent();
+            // Interceptor.RegisterBeforeSendEvent();
             _seasonWeeks = (await SeasonWeekService.ListSeasonWeeks(_currentSeason)).ToList();
         }
 

@@ -62,12 +62,12 @@ public class HttpInterceptorService
                 //     _toastService.ShowError(message);
                 //     break;
                 case HttpStatusCode.Unauthorized:
-                    _navigationManager.NavigateTo("/unauthorized");
+                    _navigationManager.NavigateTo("/login");
                     message = "Unauthorized access";
                     break;
                 default:
                     _navigationManager.NavigateTo("/error");
-                    message = "Something went wrong. Please contact the administrator.";
+                    message = "Something went wrong. Please try again.";
                     break;
             }
 
