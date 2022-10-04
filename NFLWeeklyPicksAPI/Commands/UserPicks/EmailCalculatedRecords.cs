@@ -51,28 +51,38 @@ public class EmailCalculatedRecords : IRequest<Unit>
                 .PickLineItems.First(c => c.PickTypeId == (int)PickType.WithPoints).CompetitionId;
 
             var competition =
-                await _db.Competitions.FirstAsync(c => c.EspnCompetitionId == lastCompetition, cancellationToken);
+                await _db.Competitions.FirstAsync(c => c.CompetitionsId == lastCompetition, cancellationToken);
+
+            var homeTeamEspnId = await _db.Teams
+                .Where(t => t.TeamsId == competition.HomeTeamId)
+                .Select(t => t.EspnTeamId)
+                .FirstAsync(cancellationToken);
+
+            var awayTeamEspnId = await _db.Teams
+                .Where(t => t.TeamsId == competition.AwayTeamId)
+                .Select(t => t.EspnTeamId)
+                .FirstAsync(cancellationToken);
 
             var homeTeamScore = await _dispatcher.Send(new GetTeamScore()
             {
                 CompetitionId = (int)competition.EspnCompetitionId,
-                TeamId = competition.HomeTeamId
+                TeamId = homeTeamEspnId
             }, cancellationToken);
             var awayTeamScore = await _dispatcher.Send(new GetTeamScore()
             {
                 CompetitionId = (int)competition.EspnCompetitionId,
-                TeamId = competition.AwayTeamId
+                TeamId = awayTeamEspnId
             }, cancellationToken);
             var totalPoints = homeTeamScore + awayTeamScore;
 
             var finalCalculations = (from userRecord in userRecords.OrderByDescending(ur => ur.Wins)
                 let pointsSubmitted = allWeeklyPicks.First(w => w.UserPicksId == userRecord.UserPickId)
-                    .PickLineItems.First()
+                    .PickLineItems.First(pl => pl.CompetitionId == lastCompetition)
                     .PickPoints
                 select (userRecord, Math.Abs(totalPoints - pointsSubmitted))).ToList();
 
             var orderedCalculations = finalCalculations
-                .OrderByDescending(fc => fc.userRecord.Wins)
+                .OrderByDescending(fc => int.Parse(fc.userRecord.Wins))
                 .ThenBy(fc => fc.Item2);
 
             //Check if there are multiple entries with same point difference
