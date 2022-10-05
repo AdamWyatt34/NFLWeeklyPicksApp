@@ -35,7 +35,8 @@ namespace NFLWeeklyPicksAPI.Queries.Authentication
 
                 var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
 
-                var message = new Message(new string[] { user.Email }, "Authentication Code", token, null);
+                var message = new Message(new string[] { user.Email }, "Authentication Code", GenerateBody(token),
+                    null);
                 await _emailSender.SendEmailAsync(message);
 
                 return true;
