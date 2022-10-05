@@ -42,11 +42,20 @@ namespace NFLWeeklyPicksAPI.Commands.Authentication
                 var url =
                     $"{_clientOptions.Url}/reset-password/?token={token}&email={user.Email}";
                 //TODO Generate html body
-                var message = new Message(new string[] { user.Email }, "Reset Password token", url, null);
+                var message = new Message(new string[] { user.Email }, "Reset Password token", GenerateBody(url), null);
 
                 await _emailSender.SendEmailAsync(message);
 
                 return Unit.Value;
+            }
+
+            private string GenerateBody(string url)
+            {
+                var sb = new StringBuilder();
+                sb.Append("You have requested a password reset from the weekly picks app.<br/>");
+                sb.Append("If you did not request this password reset, please ignore this email.<br/>");
+                sb.Append($"<p>Please click <a href=\"{url}\">here</a> to reset your password.</p>");
+                return sb.ToString();
             }
         }
     }

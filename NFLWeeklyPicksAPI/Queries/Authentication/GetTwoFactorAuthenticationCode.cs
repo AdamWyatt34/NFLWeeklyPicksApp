@@ -1,4 +1,5 @@
-﻿using EmailService;
+﻿using System.Text;
+using EmailService;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,8 +9,7 @@ namespace NFLWeeklyPicksAPI.Queries.Authentication
 {
     public class GetTwoFactorAuthenticationCode : IRequest<bool>
     {
-        [FromQuery]
-        public string Email { get; set; }
+        [FromQuery] public string Email { get; set; }
 
         public class Handler : IRequestHandler<GetTwoFactorAuthenticationCode, bool>
         {
@@ -39,6 +39,14 @@ namespace NFLWeeklyPicksAPI.Queries.Authentication
                 await _emailSender.SendEmailAsync(message);
 
                 return true;
+            }
+
+            private string GenerateBody(string token)
+            {
+                var sb = new StringBuilder();
+                sb.Append("Please enter this token in the app to log in <br/><br/>");
+                sb.Append(token);
+                return sb.ToString();
             }
         }
     }

@@ -52,9 +52,17 @@ namespace NFLWeeklyPicksAPI.Commands.Authentication
                 var token = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
                 var url = $"{_clientOptions.Url}/confirm-email/?token={token}&email={user.Email}";
 
-                var message = new Message(new string[] { user.Email }, "Confirm Email", url, null);
+                var message = new Message(new string[] { user.Email }, "Confirm Email", GenerateBody(url), null);
 
                 await _emailSender.SendEmailAsync(message);
+            }
+
+            private string GenerateBody(string url)
+            {
+                var sb = new StringBuilder();
+                sb.Append("<p>Thank you for registering for the weekly picks app.</p><br/><br/>");
+                sb.Append($"<p>Please click <a href=\"{url}\">here</a> to confirm your account and log in.</p>");
+                return sb.ToString();
             }
         }
     }

@@ -61,8 +61,8 @@ namespace NFLWeeklyPicksAPI.Commands.Authentication
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var url = $"{_clientOptions.Url}/reset-password/{token}";
 
-                var content = $@"Your account is locked out due to too many unsuccessful sign-in attempts
-                                to reset your password click this link {url}";
+                var content =
+                    $"Your account is locked out due to too many unsuccessful sign-in attempts to reset your password click <a href=\"{url}\">here</a>";
 
                 var message = new Message(new[] { user.Email }, "Locked out account information", content, null);
                 await _emailSender.SendEmailAsync(message);
