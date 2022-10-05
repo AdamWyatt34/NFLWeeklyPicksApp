@@ -48,8 +48,7 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
             }
 
             //Change _isLocked to false for testing
-            //_isLocked = _games.Games.First().GameDate <= DateTime.Now;
-            _isLocked = false;
+            _isLocked = _games.Games.First().GameDate <= DateTime.Now;
             _lastGame = _games.Games.Last();
             _games.Games.ForEach(game =>
             {
