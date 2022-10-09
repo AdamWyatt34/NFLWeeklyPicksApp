@@ -11,12 +11,12 @@ namespace NFLWeeklyPicksUI.Pages.PickWeeks
         [Inject] public NavigationManager NavigationManager { get; set; }
         [Inject] public HttpInterceptorService Interceptor { get; set; }
 
-        private List<SeasonWeeksViewModel> _seasonWeeks = new();
+        private List<SeasonWeeksViewModel> _seasonWeeks;
         private int _currentSeason = 2022; //TODO inject this
 
         protected override async Task OnInitializedAsync()
         {
-            // Interceptor.RegisterEvent();
+            Interceptor.RegisterEvent();
             // Interceptor.RegisterBeforeSendEvent();
             _seasonWeeks = (await SeasonWeekService.ListSeasonWeeks(_currentSeason)).ToList();
         }
