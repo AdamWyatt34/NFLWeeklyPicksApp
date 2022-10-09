@@ -95,6 +95,7 @@ public class ListWeeklyGamesWithScore : IRequest<WeeklyGamesWithScoreViewModel>
                 //Populate User Picks
                 var userPicks = await _db.UserPicks
                     .Include(up => up.PickLineItems)
+                    .Where(up => up.IsPaid)
                     .Where(up => up.PickLineItems.Any(up => up.CompetitionId == viewModel.CompetitionId))
                     .ToListAsync(cancellationToken);
 

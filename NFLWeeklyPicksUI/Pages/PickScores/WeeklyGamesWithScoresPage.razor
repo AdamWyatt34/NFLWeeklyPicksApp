@@ -1,7 +1,9 @@
 @page "/picks/scores/{Season:int}/{Week:int}"
 
 <h3>@_headerText</h3>
-
+<div class="alert alert-warning" role="alert">
+    Once your pick has been paid for, you will be able to view it here.
+</div>
 @if (_isLoading)
 {
     <div class="col-md-4 p-3">

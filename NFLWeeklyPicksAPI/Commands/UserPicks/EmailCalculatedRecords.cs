@@ -45,6 +45,7 @@ public class EmailCalculatedRecords : IRequest<Unit>
                 .Where(up => up.PickLineItems.Any(pli => pli.PickTypeId == (int)PickType.WithPoints))
                 .Where(up => up.Season == lastSeasonWeek.Season.Year)
                 .Where(up => up.Week == lastSeasonWeek.WeekNumber)
+                .Where(up => up.IsPaid)
                 .ToListAsync(cancellationToken);
 
             var lastCompetition = allWeeklyPicks.First()
