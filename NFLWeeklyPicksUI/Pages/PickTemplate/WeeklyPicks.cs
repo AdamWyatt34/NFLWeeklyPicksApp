@@ -29,7 +29,8 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
         private WeeklyGameViewModel _lastGame;
         private UserPickLineItems _lastPickLineItem;
         private bool _isLocked;
-        private bool _isBusy = false;
+        private bool _isBusy;
+        private bool _lockButton;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 #pragma warning disable CS8601 // Possible null reference assignment.
@@ -48,7 +49,7 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
             }
 
             //Change _isLocked to false for testing
-            _isLocked = _games.Games.First().GameDate <= DateTime.Now;
+            _isLocked = _games.Games.First().GameDate <= DateTime.UtcNow;
             _lastGame = _games.Games.Last();
             _games.Games.ForEach(game =>
             {
@@ -105,7 +106,14 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
                     Summary = $"Week {picks.Week} picks successfully submitted",
                     Duration = 4000
                 });
+                NotificationService.Notify(new NotificationMessage()
+                {
+                    Severity = NotificationSeverity.Info,
+                    Summary = "Reminder to Cash App the entry fee for this week's picks to $MrsJT317",
+                    Duration = 4000
+                });
                 _isBusy = false;
+                _lockButton = true;
             }
             else
             {

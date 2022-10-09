@@ -36,14 +36,11 @@ namespace NFLWeeklyPicksAPI.Controllers
             if (!result)
                 return null;
 
-            if (await _userManager.GetTwoFactorEnabledAsync(user))
-            {
-                await _dispatcher.Send(new GetTwoFactorAuthenticationCode() { Email = user.Email },
-                    new CancellationToken());
-                return new TokenDto("2FARequired", $"{user.Email}");
-            }
+            if (!await _userManager.GetTwoFactorEnabledAsync(user))
+                return await _dispatcher.Send(new CreateToken() { User = user, PopulateExpiration = true });
 
-            return await _dispatcher.Send(new CreateToken() { User = user, PopulateExpiration = true });
+            await _dispatcher.Send(new GetTwoFactorAuthenticationCode() { Email = user.Email });
+            return new TokenDto("2FARequired", $"{user.Email}");
         }
 
         [Route("forgot-password"), HttpPost, ProducesResponseType((int)HttpStatusCode.NoContent)]

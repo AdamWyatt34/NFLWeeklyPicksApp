@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
 using NFLWeeklyPicksUI.AuthProviders;
 using NFLWeeklyPicksUI.Models.Authentication;
 using System.Net.Http.Headers;
@@ -83,6 +82,7 @@ namespace NFLWeeklyPicksUI.Services
 
             var token = await response.Content.ReadFromJsonAsync<LoginToken>();
 
+            await _localStorage.ClearAsync();
             await _localStorage.SetItemAsync("authToken", token.AccessToken);
             await _localStorage.SetItemAsync("refreshToken", token.RefreshToken);
             ((AuthStateProvider)_authenticationState).NotifyUserAuthentication(token.AccessToken);

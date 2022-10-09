@@ -3,7 +3,7 @@
                     Name="awayTeamCheckbox" TValue="bool" Change=@(args => HandleCheckboxChange(args, "awayTeam"))/>
     <PickTeam Team="Game.AwayTeam"/>
     <div class="mx-3">
-        <div>@Game.GameDate</div>
+        <div>@Game.GameDate.AddMinutes(-240)</div>
         <div>Odds: @Game.Odds</div>
     </div>
     <PickTeam Team="Game.HomeTeam"/>
