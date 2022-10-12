@@ -50,6 +50,7 @@ public class CalculatePickRecordsWeek : IRequest<List<UserPickWeeklyRecordViewMo
 
                 var userPicks = await _db.UserPicks
                     .Include(up => up.PickLineItems)
+                    .Where(up => up.IsPaid)
                     .Where(up => up.Season == request.Season)
                     .Where(up => up.Week == request.WeekNumber)
                     .Where(up => up.PickLineItems.Any(up => up.CompetitionId == game.CompetitionId))
