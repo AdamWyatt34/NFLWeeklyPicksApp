@@ -6,7 +6,7 @@
     <p>Please correct the following error(s):</p>
     <br>
     <ul>
-        @foreach (var error in Errors)
+        @foreach (var error in Errors!)
         {
             <li>@error.Description</li>
         }
@@ -94,7 +94,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
-            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save"/>
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" IsBusy="_isBusy" BusyText="Saving"/>
         </div>
     </div>
 </RadzenTemplateForm>

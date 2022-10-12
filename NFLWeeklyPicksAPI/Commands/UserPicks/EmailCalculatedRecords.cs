@@ -131,15 +131,16 @@ public class EmailCalculatedRecords : IRequest<Unit>
             stringBuilder.Append("Congratulations to: ").Append(string.Join(',', winningUsers))
                 .Append(" for winning this week!<br/><br/>").AppendLine().AppendLine();
 
-            stringBuilder.Append("Below is everyone's results for this week.<br/><br/>").AppendLine().AppendLine();
+            stringBuilder.Append("<p style=\"color:black;\">Below is everyone's results for this week.<br/><br/><p/>")
+                .AppendLine().AppendLine();
             foreach (var result in results)
             {
                 stringBuilder.Append(
-                    $"{result.Item1.UserPickDescription} - {result.Item1.Wins} Wins - {result.Item1.Losses} Losses - {result.Item2} point difference <br/> </br/> <br/>");
+                    $"<p style=\"color:black;\">{result.Item1.UserPickDescription} - {result.Item1.Wins} Wins - {result.Item1.Losses} Losses - {result.Item2} point difference <br/> </br/> <br/><p/>");
                 stringBuilder.AppendLine().AppendLine();
             }
 
-            stringBuilder.Append("Thank you!");
+            stringBuilder.Append("<p style=\"color:black;\">Thank you!<p/>");
             return stringBuilder.ToString();
         }
     }

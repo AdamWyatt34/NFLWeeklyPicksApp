@@ -128,6 +128,7 @@ namespace NFLWeeklyPicksUI.Pages.PickTemplate
             }
 
             _isBusy = false;
+            StateHasChanged();
         }
 
         private void Cancel()
