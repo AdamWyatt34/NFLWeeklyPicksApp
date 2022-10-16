@@ -20,4 +20,11 @@ public class UserPickService : IUserPickService
 
         return result;
     }
+
+    public async Task<List<UnpaidPickViewModel>> GetUnpaidPicks(int season, int week)
+    {
+        var result = await _client.GetFromJsonAsync<List<UnpaidPickViewModel>>($"api/user-pick/unpaid/{season}/{week}");
+
+        return result;
+    }
 }
