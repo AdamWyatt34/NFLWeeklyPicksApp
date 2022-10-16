@@ -85,6 +85,8 @@ namespace NFLWeeklyPicksAPI.ViewModels
         public int SelectedTeamId { get; set; }
         public string SelectedTeam { get; set; }
         public string SelectedTeamAbbreviation { get; set; }
+        public int CompetitionType { get; set; }
+        public int CompetitionPoints { get; set; }
     }
 
     public class UserPickScoreViewModelWithWinner : UserPickScoreViewModel

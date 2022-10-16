@@ -11,7 +11,7 @@ namespace NFLWeeklyPicksAPI.Controllers
 {
     [Route("api/user-pick")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UserPickController : ControllerBase
     {
         private readonly IMediator _dispatcher;
