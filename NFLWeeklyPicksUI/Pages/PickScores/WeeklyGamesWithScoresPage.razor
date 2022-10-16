@@ -21,7 +21,14 @@ else
                 <Items>
                     @foreach (var game in _gamesWithScores.Games)
                     {
-                        <GameAccordionItem GameWithScore=@game/>
+                        if (game.UserPicks.First().CompetitionType == 2)
+                        {
+                            <GameAccordionItem GameWithScore=@game/>
+                        }
+                        else
+                        {
+                            <GameWithScoreAccordionItem GameWithScore=@game/>
+                        }
                     }
                 </Items>
             </RadzenAccordion>

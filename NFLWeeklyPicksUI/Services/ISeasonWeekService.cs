@@ -7,4 +7,6 @@ public interface ISeasonWeekService
     Task<IEnumerable<SeasonWeeksViewModel>> ListSeasonWeeks(int season);
     Task<WeeklyGamesViewModel> ListWeeklyGames(int season, int week);
     Task<WeeklyGamesWithScoreViewModel> ListWeeklyGamesWithScore(int season, int week);
+    Task<IEnumerable<SeasonViewModel>> ListSeasons();
+    Task<IEnumerable<WeekViewModel>> ListWeeks(int seasonId);
 }

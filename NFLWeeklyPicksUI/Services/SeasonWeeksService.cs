@@ -34,4 +34,18 @@ public class SeasonWeeksService : ISeasonWeekService
 
         return result;
     }
+
+    public async Task<IEnumerable<SeasonViewModel>> ListSeasons()
+    {
+        var result = await _client.GetFromJsonAsync<IEnumerable<SeasonViewModel>>($"api/season");
+
+        return result;
+    }
+
+    public async Task<IEnumerable<WeekViewModel>> ListWeeks(int seasonId)
+    {
+        var result = await _client.GetFromJsonAsync<IEnumerable<WeekViewModel>>($"api/season/{seasonId}/week");
+
+        return result;
+    }
 }

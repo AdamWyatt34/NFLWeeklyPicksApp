@@ -129,8 +129,8 @@ public class ListWeeklyGamesWithScore : IRequest<WeeklyGamesWithScoreViewModel>
                     }
 
 
-                    var selectedTeamId = pick.PickLineItems.First(pl => pl.CompetitionId == viewModel.CompetitionId)
-                        .PickTeamId;
+                    var pickLine = pick.PickLineItems.First(pl => pl.CompetitionId == viewModel.CompetitionId);
+                    var selectedTeamId = pickLine.PickTeamId;
                     var team = teams.Find(t => t.TeamsId == selectedTeamId);
                     picks.Add(new UserPickScoreViewModel()
                     {
@@ -138,7 +138,9 @@ public class ListWeeklyGamesWithScore : IRequest<WeeklyGamesWithScoreViewModel>
                         SelectedTeamAbbreviation = team.Abbreviation,
                         Username = users.Find(u => u.Id == pick.UserId.ToString()).UserName,
                         UserPickNumber = currentIndex,
-                        SelectedTeamId = team.TeamsId
+                        SelectedTeamId = team.TeamsId,
+                        CompetitionType = pickLine.PickTypeId,
+                        CompetitionPoints = pickLine.PickPoints
                     });
                 }
 

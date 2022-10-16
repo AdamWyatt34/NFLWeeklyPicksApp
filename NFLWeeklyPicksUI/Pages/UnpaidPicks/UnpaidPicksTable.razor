@@ -1,0 +1,42 @@
+@page "/unpaid-picks"
+@using NFLWeeklyPicksUI.Models
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-6 mb-4">
+            <RadzenCard>
+                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3">Select Season</RadzenText>
+                <RadzenDropDown Change=@(args => OnSeasonChange(args, "Season")) Style="width:300px" TValue="int" @bind-Value="SeasonId" Placeholder="Select season" AllowFiltering="true" Data="@(Seasons)" TextProperty="Year" ValueProperty="SeasonID"/>
+            </RadzenCard>
+        </div>
+        <div class="col-xl-6 mb-4">
+            <RadzenCard>
+                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3">Select Week</RadzenText>
+                <RadzenDropDown Change=@(args => OnWeekChange(args, "Week")) Style="width:300px" TValue="int" @bind-Value="WeekId" Placeholder="Select week" Data="Weeks" ValueProperty="SeasonWeekId" TextProperty="WeekDescription"/>
+            </RadzenCard>
+        </div>
+        <div class="col-12 mb-4">
+            <RadzenCard>
+                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H3">Unpaid Picks</RadzenText>
+                <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                Data="@UnpaidPicks" TItem="UnpaidPickViewModel" ColumnWidth="200px">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="UnpaidPickViewModel" Property="UserPickDescription" Title="Pick Description"/>
+                        <RadzenDataGridColumn TItem="UnpaidPickViewModel" Property="IsPaid" Title="Is Paid"/>
+                        <RadzenDataGridColumn TItem="UnpaidPickViewModel">
+                            <Template Context="UnpaidPickViewModel">
+                                <RadzenButton Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Success"
+                                              Click="() => MarkPickPaid(UnpaidPickViewModel)" Text="Mark Paid"/>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+                <div class="row justify-content-center">
+                    <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                        <RadzenButton Click="Submit" IsBusy="@_isBusy" BusyText="Saving..." ButtonType="ButtonType.Submit" Icon="save" Text="Save"/>
+                    </div>
+                </div>
+            </RadzenCard>
+        </div>
+    </div>
+</div>
