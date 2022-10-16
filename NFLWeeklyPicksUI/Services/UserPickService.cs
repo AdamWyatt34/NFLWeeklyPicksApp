@@ -27,4 +27,11 @@ public class UserPickService : IUserPickService
 
         return result;
     }
+
+    public async Task<bool> MarkUnpaidPicks(IEnumerable<UnpaidPickViewModel> picks)
+    {
+        var result = await _client.PutAsJsonAsync($"api/user-pick/mark-unpaid", new { Picks = picks });
+
+        return result.IsSuccessStatusCode;
+    }
 }

@@ -38,7 +38,7 @@ namespace NFLWeeklyPicksAPI.Controllers
         public async Task<IEnumerable<UnpaidPickViewModel>> GetUnpaidPicks([FromRoute] GetUnpaidPicks query) =>
             await _dispatcher.Send(query);
 
-        [Route("mark-unpaid"), HttpPost, ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [Route("mark-unpaid"), HttpPut, ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<Unit> MarkUserPickPaid(MarkUserPicksPaid query) => await _dispatcher.Send(query);
     }
 }

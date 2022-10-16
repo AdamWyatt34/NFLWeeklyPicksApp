@@ -6,7 +6,8 @@ namespace NFLWeeklyPicksAPI.Commands.UserPicks;
 
 public class MarkUserPicksPaid : IRequest<Unit>
 {
-    [FromBody] public Model Body { get; set; }
+    public IEnumerable<UserPaidModel> Picks { get; set; }
+    //[FromBody] public Model Body { get; set; }
 
     public record Model(IEnumerable<UserPaidModel> Picks);
 
@@ -23,7 +24,7 @@ public class MarkUserPicksPaid : IRequest<Unit>
 
         public async Task<Unit> Handle(MarkUserPicksPaid request, CancellationToken cancellationToken)
         {
-            foreach (var pick in request.Body.Picks)
+            foreach (var pick in request.Picks)
             {
                 var userPick = await _db.UserPicks.FirstAsync(p => p.UserPicksId == pick.UserPickId, cancellationToken);
                 userPick.IsPaid = pick.IsPaid;
